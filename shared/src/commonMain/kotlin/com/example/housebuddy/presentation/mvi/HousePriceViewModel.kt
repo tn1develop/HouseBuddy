@@ -3,7 +3,6 @@ package com.example.housebuddy.presentation.mvi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
@@ -15,8 +14,7 @@ import kotlin.math.round
 
 class HousePriceViewModel(
     private val calculateHousePriceUseCase: CalculateHousePriceUseCase = CalculateHousePriceUseCase()
-) : ViewModel() {
-
+) {
     var state by mutableStateOf(HousePriceViewState())
         private set
 

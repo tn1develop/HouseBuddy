@@ -1,6 +1,8 @@
 package com.example.housebuddy.domain.util
 
-import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.round
 
 fun parseInputOrDefault(input: String, default: Double): Double {
     return input
@@ -11,23 +13,32 @@ fun parseInputOrDefault(input: String, default: Double): Double {
 
 fun formatThousandsWithApostrophe(value: Int): String {
     val sign = if (value < 0) "-" else ""
-    val raw = kotlin.math.abs(value).toString()
+    val raw = abs(value).toString()
     val grouped = raw.reversed().chunked(3).joinToString("'").reversed()
     return "$sign$grouped"
 }
 
 fun formatNumber(value: Double, decimals: Int): String {
-    return if (decimals == 0) {
-        value.toInt().toString()
+    if (decimals == 0) {
+        return value.toInt().toString()
+    }
+    val factor = 10.0.pow(decimals)
+    val rounded = round(value * factor) / factor
+    val str = rounded.toString()
+    val dotIndex = str.indexOf('.')
+    return if (dotIndex == -1) {
+        "$str.${"0".repeat(decimals)}"
     } else {
-        String.format(Locale.US, "%.${decimals}f", value)
+        val intPart = str.substring(0, dotIndex)
+        val decPart = str.substring(dotIndex + 1).padEnd(decimals, '0').take(decimals)
+        "$intPart.$decPart"
     }
 }
 
 fun formatEuroAmount(value: Double): String {
     val sign = if (value < 0) "-" else ""
-    val absolute = kotlin.math.abs(value)
-    val parts = String.format(Locale.US, "%.2f", absolute).split('.')
+    val absolute = abs(value)
+    val parts = formatNumber(absolute, 2).split('.')
     val integerPart = parts[0].reversed().chunked(3).joinToString("'").reversed()
     return "€ $sign$integerPart.${parts[1]}"
 }
@@ -52,6 +63,6 @@ fun calcolaRataMutuo(
     val numeroRate = durataAnni * 12
     if (tassoMensile == 0.0) return importo / numeroRate
 
-    val fattore = Math.pow(1 + tassoMensile, numeroRate.toDouble())
+    val fattore = (1 + tassoMensile).pow(numeroRate.toDouble())
     return importo * (tassoMensile * fattore) / (fattore - 1)
 }
