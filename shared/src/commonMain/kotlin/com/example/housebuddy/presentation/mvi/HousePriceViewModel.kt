@@ -3,6 +3,7 @@ package com.example.housebuddy.presentation.mvi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.example.housebuddy.data.local.HousePriceStateStorage
 import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
@@ -13,9 +14,10 @@ import com.example.housebuddy.domain.util.tassoDefault
 import kotlin.math.round
 
 class HousePriceViewModel(
-    private val calculateHousePriceUseCase: CalculateHousePriceUseCase = CalculateHousePriceUseCase()
+    private val calculateHousePriceUseCase: CalculateHousePriceUseCase = CalculateHousePriceUseCase(),
+    private val stateStorage: HousePriceStateStorage = HousePriceStateStorage()
 ) {
-    var state by mutableStateOf(HousePriceViewState())
+    var state by mutableStateOf(stateStorage.load())
         private set
 
     val result: HousePriceResult
@@ -33,7 +35,7 @@ class HousePriceViewModel(
         )
 
     fun handleEvent(event: HousePriceEvent) {
-        state = when (event) {
+        val newState = when (event) {
             HousePriceEvent.ToggleAdvancedFields ->
                 state.copy(showAdvancedFields = !state.showAdvancedFields)
 
@@ -119,5 +121,7 @@ class HousePriceViewModel(
                 state.copy(renditaCatastaleInput = next.toString())
             }
         }
+        state = newState
+        stateStorage.save(newState)
     }
 }
