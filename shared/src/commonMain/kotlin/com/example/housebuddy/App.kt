@@ -2,7 +2,6 @@ package com.example.housebuddy
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.housebuddy.presentation.mvi.HousePriceViewModel
 import com.example.housebuddy.ui.screen.HousePriceScreen
 import com.example.housebuddy.ui.theme.HousePricesCalculatorTheme
@@ -17,10 +16,4 @@ fun App() {
             onIntent = viewModel::handleEvent
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AppPreview() {
-    App()
 }
