@@ -1,12 +1,15 @@
 package com.example.housebuddy.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,9 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.util.formatEuroAmount
-import housebuddy.shared.generated.resources.Res
-import housebuddy.shared.generated.resources.info_icon
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ResultField(label: String, value: Double, modifier: Modifier = Modifier) {
@@ -70,9 +70,10 @@ fun InfoIcon(
         )
     }
 
-    Image(
-        painter = painterResource(Res.drawable.info_icon),
+    Icon(
+        imageVector = Icons.Outlined.Info,
         contentDescription = "Info",
+        tint = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
             .size(18.dp)
             .clickable { showDialog = true }
