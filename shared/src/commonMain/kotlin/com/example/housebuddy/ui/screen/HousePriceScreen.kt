@@ -32,10 +32,11 @@ import com.example.housebuddy.ui.components.StepperInputField
 fun HousePriceScreen(
     state: HousePriceViewState = HousePriceViewState(),
     result: HousePriceResult = CalculateHousePriceUseCase().invoke(state.toInput()),
-    onIntent: (HousePriceEvent) -> Unit = {}
+    onIntent: (HousePriceEvent) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(modifier = Modifier.padding(bottom = 32.dp), onClick = { onIntent(HousePriceEvent.ToggleAdvancedFields) }) {
                 Text(if (state.showAdvancedFields) "-" else "+")
