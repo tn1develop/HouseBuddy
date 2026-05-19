@@ -37,6 +37,10 @@ class HousePriceStateStorage(
                 HousePriceSettingsKeys.IS_PERCENTUALE,
                 defaults.isPercentuale
             ),
+            isTotalExpenses = settings.getBoolean(
+                HousePriceSettingsKeys.IS_TOTAL_EXPENSES,
+                defaults.isTotalExpenses
+            ),
             tassoMutuoInput = settings.getString(
                 HousePriceSettingsKeys.TASSO_MUTUO_INPUT,
                 defaults.tassoMutuoInput
@@ -60,6 +64,7 @@ class HousePriceStateStorage(
         settings.putString(HousePriceSettingsKeys.FISSO_AGENZIA_INPUT, state.fissoAgenziaInput)
         settings.putBoolean(HousePriceSettingsKeys.MUTUO_GREEN, state.mutuoGreen)
         settings.putBoolean(HousePriceSettingsKeys.IS_PERCENTUALE, state.isPercentuale)
+        settings.putBoolean(HousePriceSettingsKeys.IS_TOTAL_EXPENSES, state.isTotalExpenses)
         settings.putString(HousePriceSettingsKeys.TASSO_MUTUO_INPUT, state.tassoMutuoInput)
         settings.putString(HousePriceSettingsKeys.ANNI_MUTUO_INPUT, state.anniMutuoInput)
         settings.putString(HousePriceSettingsKeys.RENDITA_CATASTALE_INPUT, state.renditaCatastaleInput)
