@@ -92,6 +92,9 @@ class HousePriceViewModel(
             is HousePriceEvent.IsPercentualeChanged ->
                 state.copy(isPercentuale = event.checked)
 
+            is HousePriceEvent.IsProCapiteChanged ->
+                state.copy(isTotalExpenses = event.checked)
+
             is HousePriceEvent.TassoMutuoChanged ->
                 state.copy(tassoMutuoInput = event.value)
 

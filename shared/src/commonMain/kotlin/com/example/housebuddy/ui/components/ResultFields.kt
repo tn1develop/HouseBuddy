@@ -4,7 +4,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -55,10 +54,9 @@ fun ResultFieldCompact(label: String, value: Double, modifier: Modifier = Modifi
 }
 
 @Composable
-fun ResultFieldCompactWithInfo(
-    label: String,
-    value: Double,
+fun InfoIcon(
     infoText: String,
+    dialogTitle: String,
     modifier: Modifier = Modifier
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -66,7 +64,7 @@ fun ResultFieldCompactWithInfo(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(label) },
+            title = { Text(dialogTitle) },
             text = { Text(infoText) },
             confirmButton = {
                 TextButton(onClick = { showDialog = false }) {
@@ -76,34 +74,19 @@ fun ResultFieldCompactWithInfo(
         )
     }
 
-    Column(modifier = modifier) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 4.dp)
-        ) {
-            Text(text = label, fontWeight = FontWeight.Bold)
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .padding(start = 6.dp)
-                    .size(18.dp)
-                    .clip(CircleShape)
-                    .border(1.dp, Color.Gray, CircleShape)
-                    .clickable { showDialog = true }
-            ) {
-                Text(
-                    text = "i",
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-        OutlinedTextField(
-            value = formatEuroAmount(value),
-            onValueChange = {},
-            readOnly = true,
-            modifier = Modifier.fillMaxWidth()
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(18.dp)
+            .clip(CircleShape)
+            .border(1.dp, Color.Gray, CircleShape)
+            .clickable { showDialog = true }
+    ) {
+        Text(
+            text = "i",
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         )
     }
 }

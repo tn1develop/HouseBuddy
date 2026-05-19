@@ -17,6 +17,7 @@ sealed interface HousePriceEvent {
 
     data class MutuoGreenChanged(val checked: Boolean) : HousePriceEvent
     data class IsPercentualeChanged(val checked: Boolean) : HousePriceEvent
+    data class IsProCapiteChanged(val checked: Boolean) : HousePriceEvent
 
     data class TassoMutuoChanged(val value: String) : HousePriceEvent
     data class TassoMutuoStepped(val direction: Int) : HousePriceEvent

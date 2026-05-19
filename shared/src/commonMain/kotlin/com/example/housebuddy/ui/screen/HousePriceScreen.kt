@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
@@ -23,8 +24,8 @@ import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.presentation.mvi.HousePriceEvent
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
 import com.example.housebuddy.ui.components.ResultField
+import com.example.housebuddy.ui.components.InfoIcon
 import com.example.housebuddy.ui.components.ResultFieldCompact
-import com.example.housebuddy.ui.components.ResultFieldCompactWithInfo
 import com.example.housebuddy.ui.components.StepperInputField
 
 @Composable
@@ -36,7 +37,7 @@ fun HousePriceScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(onClick = { onIntent(HousePriceEvent.ToggleAdvancedFields) }) {
+            FloatingActionButton(modifier = Modifier.padding(bottom = 32.dp), onClick = { onIntent(HousePriceEvent.ToggleAdvancedFields) }) {
                 Text(if (state.showAdvancedFields) "-" else "+")
             }
         }
@@ -149,18 +150,13 @@ fun HousePriceScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ResultFieldCompactWithInfo(
-                        label = "Soldi subito (totale)",
-                        value = result.soldiSubito,
+                    Text(text = "Liquidità necessaria all'atto o prima", fontWeight = FontWeight.Bold)
+                    InfoIcon(
                         infoText = buildInfoText(result),
-                        modifier = Modifier.weight(1f)
-                    )
-                    ResultFieldCompact(
-                        label = "Pro capite",
-                        value = result.soldiSubito / 2.0,
-                        modifier = Modifier.weight(1f)
+                        dialogTitle = "Liquidità necessaria all'atto o prima",
+                        modifier = Modifier.padding(start = 6.dp)
                     )
                 }
                 Row(
@@ -169,15 +165,58 @@ fun HousePriceScreen(
                         .padding(horizontal = 16.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    ResultFieldCompact(
-                        label = "Rata mutuo (totale)",
-                        value = result.rataMutuo,
-                        modifier = Modifier.weight(1f)
-                    )
-                    ResultFieldCompact(
-                        label = "Pro capite",
-                        value = result.rataMutuo / 2,
-                        modifier = Modifier.weight(1f)
+                    if(state.isTotalExpenses) {
+                        ResultFieldCompact(
+                            label = "Totale",
+                            value = result.soldiSubito,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }else {
+                        ResultFieldCompact(
+                            label = "Pro capite",
+                            value = result.soldiSubito / 2.0,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),) {
+                    Text(text = "Ipotesi rata mutuo", fontWeight = FontWeight.Bold)
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if(state.isTotalExpenses) {
+                        ResultFieldCompact(
+                            label = "Totale",
+                            value = result.rataMutuo,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }else {
+                        ResultFieldCompact(
+                            label = "Pro capite",
+                            value = result.rataMutuo / 2,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "Totale o Pro Capite")
+                    Switch(
+                        checked = state.isTotalExpenses,
+                        onCheckedChange = { onIntent(HousePriceEvent.IsProCapiteChanged(it)) }
                     )
                 }
             }

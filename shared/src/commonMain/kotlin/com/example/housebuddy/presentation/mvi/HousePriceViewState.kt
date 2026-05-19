@@ -11,6 +11,7 @@ data class HousePriceViewState(
     val fissoAgenziaInput: String = "7000",
     val mutuoGreen: Boolean = false,
     val isPercentuale: Boolean = false,
+    val isTotalExpenses: Boolean = true, //total or pro capite, meaning divided by 2
     val tassoMutuoInput: String = tassoDefault(false, 20.0),
     val anniMutuoInput: String = "30",
     val renditaCatastaleInput: String = "1071"
