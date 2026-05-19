@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -18,9 +19,14 @@ fun StepperInputField(
     onValueChange: (String) -> Unit,
     onStep: (Int) -> Unit,
     suffix: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    topPadding: Dp = 4.dp
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .padding(top = topPadding, bottom = 4.dp)
+    ) {
         Text(text = label)
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { onStep(-1) }) {
