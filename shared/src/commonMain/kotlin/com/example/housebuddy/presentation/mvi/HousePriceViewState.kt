@@ -6,6 +6,7 @@ import com.example.housebuddy.domain.util.tassoDefault
 data class HousePriceViewState(
     val prezzoCasaInput: String = formatThousandsWithApostrophe(139000),
     val anticipoInput: String = "20",
+    val caparraInput: String = "5000",
     val percentualeAgenziaInput: String = "5",
     val fissoAgenziaInput: String = "7000",
     val mutuoGreen: Boolean = false,

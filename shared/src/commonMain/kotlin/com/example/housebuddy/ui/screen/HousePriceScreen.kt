@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
+import com.example.housebuddy.domain.util.formatEuroAmount
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.presentation.mvi.HousePriceEvent
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
@@ -151,6 +152,7 @@ fun HousePriceScreen(
 private fun HousePriceViewState.toInput() = HousePriceInput(
     prezzoCasaInput = prezzoCasaInput,
     anticipoInput = anticipoInput,
+    caparraInput = caparraInput,
     percentualeAgenziaInput = percentualeAgenziaInput,
     fissoAgenziaInput = fissoAgenziaInput,
     isPercentuale = isPercentuale,
@@ -160,18 +162,22 @@ private fun HousePriceViewState.toInput() = HousePriceInput(
 )
 
 private fun buildInfoText(result: HousePriceResult): String {
-    return "Anticipo, caparra, agenzia con Iva, \n\nmutuo:  \n" +
-        "- istruttoria ${result.breakdown.istruttoria}\n" +
-        "- imposta sostitutiva ${result.breakdown.impostaSostitutiva}\n" +
-        "- perizia ${result.breakdown.perizia}\n " +
-        "- assicurazione incendio ${result.breakdown.polizzaIncendioObbligatoria}\n " +
-        "- assicurazione vita ${result.breakdown.polizzaVita}\n\n " +
-        "notaio: \n" +
-        "- Imposta di registro ${result.breakdown.impostaRegistro}\n" +
-        "- Imposta ipotecaria ${result.breakdown.impostaIpotecaria}\n" +
-        "- Imposta catastale ${result.breakdown.impostaCatastale}\n" +
-        "- Tassa archivio ${result.breakdown.tassaArchivio}\n" +
-        "- Onorario, scritturazione, diritti di copia ${result.breakdown.onorarioScritturazioneDirittiCopia}\n" +
-        "- Contributo CNN, Consiglio, Cassa, Iscrizione a repertorio ${result.breakdown.contributoCNNConsiglioCassaIscrizioneRepertorio}\n" +
-        "- Visure ipotecarie ${result.breakdown.visureIpotecarie}"
+    return  "spese principali:\n" +
+        "- Caparra ${formatEuroAmount(result.breakdown.caparra)}\n" +
+        "- Anticipo tolta la caparra ${formatEuroAmount(result.breakdown.anticipoToltaCaparra)}\n" +
+        "- Agenzia con Iva ${formatEuroAmount(result.breakdown.agenziaConIva)}\n\n" +
+            "mutuo:  \n" +
+        "- istruttoria ${formatEuroAmount(result.breakdown.istruttoria)}\n" +
+        "- imposta sostitutiva ${formatEuroAmount(result.breakdown.impostaSostitutiva)}\n" +
+        "- perizia ${formatEuroAmount(result.breakdown.perizia)}\n " +
+        "- assicurazione incendio ${formatEuroAmount(result.breakdown.polizzaIncendioObbligatoria)}\n " +
+        "- assicurazione vita ${formatEuroAmount(result.breakdown.polizzaVita)}\n\n " +
+            "notaio: \n" +
+        "- Imposta di registro ${formatEuroAmount(result.breakdown.impostaRegistro)}\n" +
+        "- Imposta ipotecaria ${formatEuroAmount(result.breakdown.impostaIpotecaria)}\n" +
+        "- Imposta catastale ${formatEuroAmount(result.breakdown.impostaCatastale)}\n" +
+        "- Tassa archivio ${formatEuroAmount(result.breakdown.tassaArchivio)}\n" +
+        "- Onorario, scritturazione, diritti di copia ${formatEuroAmount(result.breakdown.onorarioScritturazioneDirittiCopia)}\n" +
+        "- Contributo CNN, Consiglio, Cassa, Iscrizione a repertorio ${formatEuroAmount(result.breakdown.contributoCNNConsiglioCassaIscrizioneRepertorio)}\n" +
+        "- Visure ipotecarie ${formatEuroAmount(result.breakdown.visureIpotecarie)}"
 }

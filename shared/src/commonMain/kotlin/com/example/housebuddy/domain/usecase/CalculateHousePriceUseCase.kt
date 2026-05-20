@@ -10,6 +10,7 @@ class CalculateHousePriceUseCase {
     operator fun invoke(input: HousePriceInput): HousePriceResult {
         val prezzoCasa = parseInputOrDefault(input.prezzoCasaInput, 150000.0).coerceIn(80000.0, 200000.0)
         val anticipo = parseInputOrDefault(input.anticipoInput, 20.0).coerceIn(0.0, 30.0)
+        val caparra = parseInputOrDefault(input.caparraInput, 5000.0).coerceAtLeast(0.0)
         val percentualeAgenzia = parseInputOrDefault(input.percentualeAgenziaInput, 4.0).coerceIn(0.0, 5.0)
         val fissoAgenzia = parseInputOrDefault(input.fissoAgenziaInput, 7000.0).coerceIn(0.0, 10000.0)
         val tassoMutuo = parseInputOrDefault(input.tassoMutuoInput, 2.99).coerceIn(1.0, 5.0)
@@ -32,7 +33,9 @@ class CalculateHousePriceUseCase {
         val polizzaVita = 150.0
         val speseAvvioMutuo = istruttoria + impostaSostitutiva + perizia + polizzaIncendioObbligatoria + polizzaVita
         val quotaAgenzia = if (input.isPercentuale) prezzoCasa * (percentualeAgenzia / 100.0) else fissoAgenzia
-        val soldiSubito = (quotaAgenzia * 1.22) + imposteENotaio + speseAvvioMutuo + prezzoCasa * (anticipo / 100.0)
+        val anticipoToltaCaparra = prezzoCasa * (anticipo / 100.0) - caparra
+        val agenziaConIva = quotaAgenzia * 1.22
+        val soldiSubito = agenziaConIva + imposteENotaio + speseAvvioMutuo + prezzoCasa * (anticipo / 100.0)
         val soldiMutuo = prezzoCasa * ((100.0 - anticipo) / 100.0)
         val rataMutuo = calcolaRataMutuo(soldiMutuo, tassoAnnuo = tassoMutuo, durataAnni = anniMutuo)
         val costoTotaleCasa = soldiSubito + (rataMutuo * 12.0 * anniMutuo)
@@ -43,6 +46,9 @@ class CalculateHousePriceUseCase {
             rataMutuo = rataMutuo,
             costoTotaleCasa = costoTotaleCasa,
             breakdown = HousePriceBreakdown(
+                caparra = caparra,
+                anticipoToltaCaparra = anticipoToltaCaparra,
+                agenziaConIva = agenziaConIva,
                 impostaRegistro = impostaRegistro,
                 impostaIpotecaria = impostaIpotecaria,
                 impostaCatastale = impostaCatastale,

@@ -25,6 +25,7 @@ class HousePriceViewModel(
             HousePriceInput(
                 prezzoCasaInput = state.prezzoCasaInput,
                 anticipoInput = state.anticipoInput,
+                caparraInput = state.caparraInput,
                 percentualeAgenziaInput = state.percentualeAgenziaInput,
                 fissoAgenziaInput = state.fissoAgenziaInput,
                 isPercentuale = state.isPercentuale,
@@ -58,6 +59,15 @@ class HousePriceViewModel(
                     anticipoInput = formatNumber(next, 0),
                     tassoMutuoInput = tassoDefault(state.mutuoGreen, next)
                 )
+            }
+
+            is HousePriceEvent.CaparraChanged ->
+                state.copy(caparraInput = event.value)
+
+            is HousePriceEvent.CaparraStepped -> {
+                val current = parseInputOrDefault(state.caparraInput, 5000.0)
+                val next = (current + event.direction * 500.0).coerceIn(0.0, 50000.0)
+                state.copy(caparraInput = formatNumber(next, 0))
             }
 
             is HousePriceEvent.PercentualeAgenziaChanged ->

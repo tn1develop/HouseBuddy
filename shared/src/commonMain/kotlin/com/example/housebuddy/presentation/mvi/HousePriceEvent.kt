@@ -7,6 +7,9 @@ sealed interface HousePriceEvent {
     data class AnticipoChanged(val value: String) : HousePriceEvent
     data class AnticipoStepped(val direction: Int) : HousePriceEvent
 
+    data class CaparraChanged(val value: String) : HousePriceEvent
+    data class CaparraStepped(val direction: Int) : HousePriceEvent
+
     data class PercentualeAgenziaChanged(val value: String) : HousePriceEvent
     data class PercentualeAgenziaStepped(val direction: Int) : HousePriceEvent
 

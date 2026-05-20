@@ -89,5 +89,12 @@ fun SettingsScreen(
             onStep = { onIntent(HousePriceEvent.RenditaCatastaleStepped(it)) },
             suffix = "EUR"
         )
+        StepperInputField(
+            label = "Caparra",
+            value = state.caparraInput,
+            onValueChange = { onIntent(HousePriceEvent.CaparraChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.CaparraStepped(it)) },
+            suffix = "EUR"
+        )
     }
 }

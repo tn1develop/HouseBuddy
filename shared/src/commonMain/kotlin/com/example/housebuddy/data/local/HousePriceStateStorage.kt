@@ -17,6 +17,10 @@ class HousePriceStateStorage(
                 HousePriceSettingsKeys.ANTICIPO_INPUT,
                 defaults.anticipoInput
             ),
+            caparraInput = settings.getString(
+                HousePriceSettingsKeys.CAPARRA_INPUT,
+                defaults.caparraInput
+            ),
             percentualeAgenziaInput = settings.getString(
                 HousePriceSettingsKeys.PERCENTUALE_AGENZIA_INPUT,
                 defaults.percentualeAgenziaInput
@@ -55,6 +59,7 @@ class HousePriceStateStorage(
     fun save(state: HousePriceViewState) {
         settings.putString(HousePriceSettingsKeys.PREZZO_CASA_INPUT, state.prezzoCasaInput)
         settings.putString(HousePriceSettingsKeys.ANTICIPO_INPUT, state.anticipoInput)
+        settings.putString(HousePriceSettingsKeys.CAPARRA_INPUT, state.caparraInput)
         settings.putString(HousePriceSettingsKeys.PERCENTUALE_AGENZIA_INPUT, state.percentualeAgenziaInput)
         settings.putString(HousePriceSettingsKeys.FISSO_AGENZIA_INPUT, state.fissoAgenziaInput)
         settings.putBoolean(HousePriceSettingsKeys.MUTUO_GREEN, state.mutuoGreen)
