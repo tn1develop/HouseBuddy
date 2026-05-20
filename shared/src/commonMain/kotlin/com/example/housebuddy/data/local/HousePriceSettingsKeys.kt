@@ -1,7 +1,6 @@
 package com.example.housebuddy.data.local
 
 internal object HousePriceSettingsKeys {
-    const val SHOW_ADVANCED_FIELDS = "show_advanced_fields"
     const val PREZZO_CASA_INPUT = "prezzo_casa_input"
     const val ANTICIPO_INPUT = "anticipo_input"
     const val PERCENTUALE_AGENZIA_INPUT = "percentuale_agenzia_input"

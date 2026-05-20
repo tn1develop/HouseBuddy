@@ -3,22 +3,16 @@ package com.example.housebuddy.ui.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.model.HousePriceInput
@@ -26,7 +20,6 @@ import com.example.housebuddy.domain.model.HousePriceResult
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.presentation.mvi.HousePriceEvent
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
-import com.example.housebuddy.ui.components.ResultField
 import com.example.housebuddy.ui.components.InfoIcon
 import com.example.housebuddy.ui.components.ResultFieldCompact
 import com.example.housebuddy.ui.components.StepperInputField
@@ -38,25 +31,10 @@ fun HousePriceScreen(
     onIntent: (HousePriceEvent) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
+    Column(
         modifier = modifier.fillMaxSize(),
-        floatingActionButton = {
-            FloatingActionButton(modifier = Modifier.padding(bottom = 32.dp), onClick = { onIntent(HousePriceEvent.ToggleAdvancedFields) }) {
-                Text(if (state.showAdvancedFields) "-" else "+")
-            }
-        }
-    ) { innerPadding ->
-        val layoutDirection = LocalLayoutDirection.current
-        Column(
-            modifier = Modifier
-                .padding(
-                    start = innerPadding.calculateStartPadding(layoutDirection),
-                    end = innerPadding.calculateEndPadding(layoutDirection),
-                    bottom = innerPadding.calculateBottomPadding(),
-                )
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -94,56 +72,6 @@ fun HousePriceScreen(
                         suffix = "EUR"
                     )
                 }
-
-                if (state.showAdvancedFields) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "Mutuo Green (classe A o B)")
-                        Switch(
-                            checked = state.mutuoGreen,
-                            onCheckedChange = { onIntent(HousePriceEvent.MutuoGreenChanged(it)) }
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "Percentuale o fisso (Agenzia)")
-                        Switch(
-                            checked = state.isPercentuale,
-                            onCheckedChange = { onIntent(HousePriceEvent.IsPercentualeChanged(it)) }
-                        )
-                    }
-                    StepperInputField(
-                        label = "Tasso mutuo",
-                        value = state.tassoMutuoInput,
-                        onValueChange = { onIntent(HousePriceEvent.TassoMutuoChanged(it)) },
-                        onStep = { onIntent(HousePriceEvent.TassoMutuoStepped(it)) },
-                        suffix = "%"
-                    )
-                    StepperInputField(
-                        label = "Anni mutuo",
-                        value = state.anniMutuoInput,
-                        onValueChange = { onIntent(HousePriceEvent.AnniMutuoChanged(it)) },
-                        onStep = { onIntent(HousePriceEvent.AnniMutuoStepped(it)) },
-                        suffix = "anni"
-                    )
-                    StepperInputField(
-                        label = "Rendita catastale",
-                        value = state.renditaCatastaleInput,
-                        onValueChange = { onIntent(HousePriceEvent.RenditaCatastaleChanged(it)) },
-                        onStep = { onIntent(HousePriceEvent.RenditaCatastaleStepped(it)) },
-                        suffix = "EUR"
-                    )
-                }
             }
 
             Column(
@@ -152,10 +80,10 @@ fun HousePriceScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
-                if (state.showAdvancedFields) {
-                    ResultField(label = "Soldi da chiedere in mutuo", value = result.soldiMutuo)
-                    ResultField(label = "Costo totale casa (a fine mutuo)", value = result.costoTotaleCasa)
-                }
+
+                //ResultFieldCompact(label = "Soldi da chiedere in mutuo", value = result.soldiMutuo)
+                //ResultFieldCompact(label = "Costo totale casa (a fine mutuo)", value = result.costoTotaleCasa)
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -216,21 +144,7 @@ fun HousePriceScreen(
                     }
                 }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(text = "Totale o Pro Capite")
-                    Switch(
-                        checked = state.isTotalExpenses,
-                        onCheckedChange = { onIntent(HousePriceEvent.IsProCapiteChanged(it)) }
-                    )
-                }
             }
-        }
     }
 }
 

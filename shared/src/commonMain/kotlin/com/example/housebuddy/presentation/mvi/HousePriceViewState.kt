@@ -4,7 +4,6 @@ import com.example.housebuddy.domain.util.formatThousandsWithApostrophe
 import com.example.housebuddy.domain.util.tassoDefault
 
 data class HousePriceViewState(
-    val showAdvancedFields: Boolean = false,
     val prezzoCasaInput: String = formatThousandsWithApostrophe(139000),
     val anticipoInput: String = "20",
     val percentualeAgenziaInput: String = "5",

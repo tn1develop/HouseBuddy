@@ -9,10 +9,6 @@ class HousePriceStateStorage(
     fun load(): HousePriceViewState {
         val defaults = HousePriceViewState()
         return HousePriceViewState(
-            showAdvancedFields = settings.getBoolean(
-                HousePriceSettingsKeys.SHOW_ADVANCED_FIELDS,
-                defaults.showAdvancedFields
-            ),
             prezzoCasaInput = settings.getString(
                 HousePriceSettingsKeys.PREZZO_CASA_INPUT,
                 defaults.prezzoCasaInput
@@ -57,7 +53,6 @@ class HousePriceStateStorage(
     }
 
     fun save(state: HousePriceViewState) {
-        settings.putBoolean(HousePriceSettingsKeys.SHOW_ADVANCED_FIELDS, state.showAdvancedFields)
         settings.putString(HousePriceSettingsKeys.PREZZO_CASA_INPUT, state.prezzoCasaInput)
         settings.putString(HousePriceSettingsKeys.ANTICIPO_INPUT, state.anticipoInput)
         settings.putString(HousePriceSettingsKeys.PERCENTUALE_AGENZIA_INPUT, state.percentualeAgenziaInput)

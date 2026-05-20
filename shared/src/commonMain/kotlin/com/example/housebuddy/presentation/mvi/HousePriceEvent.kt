@@ -1,8 +1,6 @@
 package com.example.housebuddy.presentation.mvi
 
 sealed interface HousePriceEvent {
-    data object ToggleAdvancedFields : HousePriceEvent
-
     data class PrezzoCasaChanged(val value: String) : HousePriceEvent
     data class PrezzoCasaStepped(val direction: Int) : HousePriceEvent
 

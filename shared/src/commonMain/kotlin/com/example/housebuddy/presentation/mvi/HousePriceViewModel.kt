@@ -36,9 +36,6 @@ class HousePriceViewModel(
 
     fun handleEvent(event: HousePriceEvent) {
         val newState = when (event) {
-            HousePriceEvent.ToggleAdvancedFields ->
-                state.copy(showAdvancedFields = !state.showAdvancedFields)
-
             is HousePriceEvent.PrezzoCasaChanged -> {
                 val digitsOnly = event.value.filter { it.isDigit() }
                 val normalized = if (digitsOnly.isEmpty()) "" else formatThousandsWithApostrophe(digitsOnly.toInt())

@@ -2,6 +2,7 @@ package com.example.housebuddy.ui.screen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,22 +27,36 @@ fun MainScreen(
     viewModel: HousePriceViewModel = remember { HousePriceViewModel() }
 ) {
     var destination by remember { mutableStateOf(BottomNavDestination.Calcolo) }
+    var showSettings by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = destination.label) },
+                title = { Text(text = if (showSettings) "Impostazioni" else destination.label) },
+                navigationIcon = {
+                    if (showSettings) {
+                        IconButton(onClick = { showSettings = false }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Indietro"
+                            )
+                        }
+                    }
+                },
                 actions = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Impostazioni"
-                        )
+                    if (!showSettings) {
+                        IconButton(onClick = { showSettings = true }) {
+                            Icon(
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = "Impostazioni"
+                            )
+                        }
                     }
                 }
             )
         },
         bottomBar = {
+            if (!showSettings) {
             NavigationBar {
                 BottomNavDestination.entries.forEach { item ->
                     NavigationBarItem(
@@ -57,16 +72,22 @@ fun MainScreen(
                     )
                 }
             }
+            }
         }
     ) { innerPadding ->
-        when (destination) {
-            BottomNavDestination.Calcolo -> HousePriceScreen(
+        when {
+            showSettings -> SettingsScreen(
+                state = viewModel.state,
+                onIntent = viewModel::handleEvent,
+                modifier = Modifier.padding(innerPadding)
+            )
+            destination == BottomNavDestination.Calcolo -> HousePriceScreen(
                 state = viewModel.state,
                 result = viewModel.result,
                 onIntent = viewModel::handleEvent,
                 modifier = Modifier.padding(innerPadding)
             )
-            BottomNavDestination.Schermo2 -> PlaceholderScreen(
+            destination == BottomNavDestination.Schermo2 -> PlaceholderScreen(
                 title = "Schermo 2",
                 modifier = Modifier.padding(innerPadding)
             )
