@@ -18,6 +18,11 @@ fun formatThousandsWithApostrophe(value: Int): String {
     return "$sign$grouped"
 }
 
+fun roundToDecimals(value: Double, decimals: Int): Double {
+    val factor = 10.0.pow(decimals)
+    return round(value * factor) / factor
+}
+
 fun formatNumber(value: Double, decimals: Int): String {
     if (decimals == 0) {
         return value.toInt().toString()

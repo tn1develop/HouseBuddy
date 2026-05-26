@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.housebuddy.domain.util.formatNumber
 import com.example.housebuddy.presentation.mvi.ExchangeRateEvent
 import com.example.housebuddy.presentation.mvi.ExchangeRateViewState
 import com.example.housebuddy.ui.components.MonthlyLineChart
-import kotlin.math.round
 
 @Composable
 fun ExchangeRateScreen(
@@ -85,7 +85,7 @@ fun ExchangeRateScreen(
                 val latest = state.monthlyRates.last()
                 val earliest = state.monthlyRates.first()
                 Text(
-                    text = "Ultimo mese (${latest.yearMonth}): ${formatRate(latest.averageRate)}%",
+                    text = "Ultimo mese (${latest.yearMonth}): ${formatNumber(latest.averageRate, 2)}%",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium
                 )
@@ -101,9 +101,4 @@ fun ExchangeRateScreen(
             }
         }
     }
-}
-
-private fun formatRate(value: Double): String {
-    val rounded = round(value * 10000.0) / 10000.0
-    return rounded.toString()
 }

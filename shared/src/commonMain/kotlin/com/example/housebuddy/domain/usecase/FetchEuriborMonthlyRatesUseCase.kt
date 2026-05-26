@@ -2,6 +2,7 @@ package com.example.housebuddy.domain.usecase
 
 import com.example.housebuddy.data.repository.EcbExchangeRateRepository
 import com.example.housebuddy.domain.model.MonthlyExchangeRate
+import com.example.housebuddy.domain.util.roundToDecimals
 
 class FetchEuriborMonthlyRatesUseCase(
     private val repository: EcbExchangeRateRepository = EcbExchangeRateRepository()
@@ -16,7 +17,7 @@ class FetchEuriborMonthlyRatesUseCase(
                 val yearMonth = observation.period.toYearMonth() ?: return@mapNotNull null
                 MonthlyExchangeRate(
                     yearMonth = yearMonth,
-                    averageRate = observation.value
+                    averageRate = roundToDecimals(observation.value, 2)
                 )
             }
             .sortedBy { it.yearMonth }
