@@ -18,13 +18,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.housebuddy.presentation.mvi.ExchangeRateViewModel
 import com.example.housebuddy.presentation.mvi.HousePriceViewModel
 import com.example.housebuddy.ui.navigation.BottomNavDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: HousePriceViewModel = remember { HousePriceViewModel() }
+    viewModel: HousePriceViewModel = remember { HousePriceViewModel() },
+    exchangeRateViewModel: ExchangeRateViewModel = remember { ExchangeRateViewModel() }
 ) {
     var destination by remember { mutableStateOf(BottomNavDestination.Calcolo) }
     var showSettings by remember { mutableStateOf(false) }
@@ -87,8 +89,9 @@ fun MainScreen(
                 onIntent = viewModel::handleEvent,
                 modifier = Modifier.padding(innerPadding)
             )
-            destination == BottomNavDestination.Schermo2 -> PlaceholderScreen(
-                title = "Schermo 2",
+            destination == BottomNavDestination.AndamentoStorico -> ExchangeRateScreen(
+                state = exchangeRateViewModel.state,
+                onIntent = exchangeRateViewModel::handleEvent,
                 modifier = Modifier.padding(innerPadding)
             )
         }

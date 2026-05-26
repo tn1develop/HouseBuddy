@@ -11,5 +11,5 @@ enum class BottomNavDestination(
     val icon: ImageVector
 ) {
     Calcolo(label = "Calcolo", icon = Icons.Default.Home),
-    Schermo2(label = "Schermo 2", icon = Icons.AutoMirrored.Filled.List),
+    AndamentoStorico(label = "Andamento Storico", icon = Icons.AutoMirrored.Filled.List),
 }
