@@ -10,6 +10,7 @@ import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.domain.util.formatNumber
 import com.example.housebuddy.domain.util.formatThousandsWithApostrophe
 import com.example.housebuddy.domain.util.parseInputOrDefault
+import com.example.housebuddy.domain.util.parsePositiveIntOrDefault
 import com.example.housebuddy.domain.util.tassoDefault
 import kotlin.math.round
 
@@ -99,8 +100,21 @@ class HousePriceViewModel(
             is HousePriceEvent.IsPercentualeChanged ->
                 state.copy(isPercentuale = event.checked)
 
-            is HousePriceEvent.IsProCapiteChanged ->
-                state.copy(isTotalExpenses = event.checked)
+            is HousePriceEvent.NumeroCompratoriChanged -> {
+                val digitsOnly = event.value.filter { it.isDigit() }
+                val normalized = if (digitsOnly.isEmpty()) {
+                    ""
+                } else {
+                    digitsOnly.toInt().coerceIn(1, 10).toString()
+                }
+                state.copy(numeroCompratoriInput = normalized)
+            }
+
+            is HousePriceEvent.NumeroCompratoriStepped -> {
+                val current = parsePositiveIntOrDefault(state.numeroCompratoriInput)
+                val next = (current + event.direction).coerceIn(1, 10)
+                state.copy(numeroCompratoriInput = next.toString())
+            }
 
             is HousePriceEvent.TassoMutuoChanged ->
                 state.copy(tassoMutuoInput = event.value)

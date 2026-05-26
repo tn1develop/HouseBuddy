@@ -4,6 +4,10 @@ import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.round
 
+fun parsePositiveIntOrDefault(input: String, default: Int = 1, min: Int = 1): Int {
+    return parseInputOrDefault(input, default.toDouble()).toInt().coerceAtLeast(min)
+}
+
 fun parseInputOrDefault(input: String, default: Double): Double {
     return input
         .replace("'", "")

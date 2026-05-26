@@ -8,6 +8,7 @@ internal object HousePriceSettingsKeys {
     const val FISSO_AGENZIA_INPUT = "fisso_agenzia_input"
     const val MUTUO_GREEN = "mutuo_green"
     const val IS_PERCENTUALE = "is_percentuale"
+    const val NUMERO_COMPRATORI_INPUT = "numero_compratori_input"
     const val IS_TOTAL_EXPENSES = "is_total_expenses"
     const val TASSO_MUTUO_INPUT = "tasso_mutuo_input"
     const val ANNI_MUTUO_INPUT = "anni_mutuo_input"

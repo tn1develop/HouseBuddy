@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
 import com.example.housebuddy.domain.util.formatEuroAmount
+import com.example.housebuddy.domain.util.parsePositiveIntOrDefault
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.presentation.mvi.HousePriceEvent
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
@@ -32,6 +33,13 @@ fun HousePriceScreen(
     onIntent: (HousePriceEvent) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val numeroCompratori = parsePositiveIntOrDefault(state.numeroCompratoriInput)
+    val expenseLabel = if (numeroCompratori == 1) {
+        "Totale"
+    } else {
+        "Pro capite ($numeroCompratori pers.)"
+    }
+
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
@@ -104,19 +112,11 @@ fun HousePriceScreen(
                         .padding(horizontal = 16.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    if(state.isTotalExpenses) {
-                        ResultFieldCompact(
-                            label = "Totale",
-                            value = result.soldiSubito,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }else {
-                        ResultFieldCompact(
-                            label = "Pro capite",
-                            value = result.soldiSubito / 2.0,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+                    ResultFieldCompact(
+                        label = expenseLabel,
+                        value = result.soldiSubito / numeroCompratori,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
                 Row (
                     modifier = Modifier
@@ -130,19 +130,11 @@ fun HousePriceScreen(
                         .padding(horizontal = 16.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    if(state.isTotalExpenses) {
-                        ResultFieldCompact(
-                            label = "Totale",
-                            value = result.rataMutuo,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }else {
-                        ResultFieldCompact(
-                            label = "Pro capite",
-                            value = result.rataMutuo / 2,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+                    ResultFieldCompact(
+                        label = expenseLabel,
+                        value = result.rataMutuo / numeroCompratori,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
 
             }
