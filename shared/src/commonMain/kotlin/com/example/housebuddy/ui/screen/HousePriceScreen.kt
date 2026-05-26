@@ -171,8 +171,9 @@ private fun buildInfoText(result: HousePriceResult): String {
         "- imposta sostitutiva ${formatEuroAmount(result.breakdown.impostaSostitutiva)}\n" +
         "- perizia ${formatEuroAmount(result.breakdown.perizia)}\n " +
         "- assicurazione incendio ${formatEuroAmount(result.breakdown.polizzaIncendioObbligatoria)}\n " +
-        "- assicurazione vita ${formatEuroAmount(result.breakdown.polizzaVita)}\n\n " +
-            "notaio: \n" +
+        "- assicurazione vita ${formatEuroAmount(result.breakdown.polizzaVita)}\n" +
+        "- notaio mutuo ${formatEuroAmount(result.breakdown.notaioMutuo)}\n\n" +
+            "notaio acquisto:\n" +
         "- Imposta di registro ${formatEuroAmount(result.breakdown.impostaRegistro)}\n" +
         "- Imposta ipotecaria ${formatEuroAmount(result.breakdown.impostaIpotecaria)}\n" +
         "- Imposta catastale ${formatEuroAmount(result.breakdown.impostaCatastale)}\n" +

@@ -27,7 +27,8 @@ data class HousePriceBreakdown(
     val impostaSostitutiva: Double,
     val perizia: Double,
     val polizzaIncendioObbligatoria: Double,
-    val polizzaVita: Double
+    val polizzaVita: Double,
+    val notaioMutuo: Double
 )
 
 data class HousePriceResult(

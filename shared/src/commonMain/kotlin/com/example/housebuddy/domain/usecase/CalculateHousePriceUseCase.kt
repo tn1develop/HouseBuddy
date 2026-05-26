@@ -31,12 +31,13 @@ class CalculateHousePriceUseCase {
         val perizia = 300.0
         val polizzaIncendioObbligatoria = 650.0
         val polizzaVita = 150.0
-        val speseAvvioMutuo = istruttoria + impostaSostitutiva + perizia + polizzaIncendioObbligatoria + polizzaVita
+        val soldiMutuo = prezzoCasa * ((100.0 - anticipo) / 100.0)
+        val notaioMutuo = soldiMutuo * 0.004 + 400.0
+        val speseAvvioMutuo = istruttoria + impostaSostitutiva + perizia + polizzaIncendioObbligatoria + polizzaVita + notaioMutuo
         val quotaAgenzia = if (input.isPercentuale) prezzoCasa * (percentualeAgenzia / 100.0) else fissoAgenzia
         val anticipoToltaCaparra = prezzoCasa * (anticipo / 100.0) - caparra
         val agenziaConIva = quotaAgenzia * 1.22
         val soldiSubito = agenziaConIva + imposteENotaio + speseAvvioMutuo + prezzoCasa * (anticipo / 100.0)
-        val soldiMutuo = prezzoCasa * ((100.0 - anticipo) / 100.0)
         val rataMutuo = calcolaRataMutuo(soldiMutuo, tassoAnnuo = tassoMutuo, durataAnni = anniMutuo)
         val costoTotaleCasa = soldiSubito + (rataMutuo * 12.0 * anniMutuo)
 
@@ -60,7 +61,8 @@ class CalculateHousePriceUseCase {
                 impostaSostitutiva = impostaSostitutiva,
                 perizia = perizia,
                 polizzaIncendioObbligatoria = polizzaIncendioObbligatoria,
-                polizzaVita = polizzaVita
+                polizzaVita = polizzaVita,
+                notaioMutuo = notaioMutuo
             )
         )
     }
