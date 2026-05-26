@@ -2,7 +2,7 @@ package com.example.housebuddy.domain.model
 
 data class HousePriceInput(
     val prezzoCasaInput: String,
-    val anticipoInput: String,
+    val richiestaMutuoInput: String,
     val caparraInput: String,
     val percentualeAgenziaInput: String,
     val fissoAgenziaInput: String,

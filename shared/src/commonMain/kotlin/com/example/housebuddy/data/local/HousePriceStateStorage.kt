@@ -1,5 +1,7 @@
 package com.example.housebuddy.data.local
 
+import com.example.housebuddy.domain.util.formatNumber
+import com.example.housebuddy.domain.util.parseInputOrDefault
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
 import com.russhwolf.settings.Settings
 
@@ -13,9 +15,9 @@ class HousePriceStateStorage(
                 HousePriceSettingsKeys.PREZZO_CASA_INPUT,
                 defaults.prezzoCasaInput
             ),
-            anticipoInput = settings.getString(
-                HousePriceSettingsKeys.ANTICIPO_INPUT,
-                defaults.anticipoInput
+            richiestaMutuoInput = settings.getString(
+                HousePriceSettingsKeys.RICHIESTA_MUTUO_INPUT,
+                defaults.richiestaMutuoInput
             ),
             caparraInput = settings.getString(
                 HousePriceSettingsKeys.CAPARRA_INPUT,
@@ -58,7 +60,7 @@ class HousePriceStateStorage(
 
     fun save(state: HousePriceViewState) {
         settings.putString(HousePriceSettingsKeys.PREZZO_CASA_INPUT, state.prezzoCasaInput)
-        settings.putString(HousePriceSettingsKeys.ANTICIPO_INPUT, state.anticipoInput)
+        settings.putString(HousePriceSettingsKeys.RICHIESTA_MUTUO_INPUT, state.richiestaMutuoInput)
         settings.putString(HousePriceSettingsKeys.CAPARRA_INPUT, state.caparraInput)
         settings.putString(HousePriceSettingsKeys.PERCENTUALE_AGENZIA_INPUT, state.percentualeAgenziaInput)
         settings.putString(HousePriceSettingsKeys.FISSO_AGENZIA_INPUT, state.fissoAgenziaInput)

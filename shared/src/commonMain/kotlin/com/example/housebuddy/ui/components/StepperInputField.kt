@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +21,8 @@ fun StepperInputField(
     onStep: (Int) -> Unit,
     suffix: String,
     modifier: Modifier = Modifier,
-    topPadding: Dp = 4.dp
+    topPadding: Dp = 4.dp,
+    supportingText: String? = null
 ) {
     Column(
         modifier = modifier
@@ -44,6 +46,14 @@ fun StepperInputField(
             IconButton(onClick = { onStep(1) }) {
                 Text("+")
             }
+        }
+        supportingText?.let { text ->
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 2.dp)
+            )
         }
     }
 }

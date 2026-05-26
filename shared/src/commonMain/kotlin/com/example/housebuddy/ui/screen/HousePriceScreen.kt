@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
 import com.example.housebuddy.domain.util.formatEuroAmount
+import com.example.housebuddy.domain.util.formatNumber
+import com.example.housebuddy.domain.util.parseInputOrDefault
 import com.example.housebuddy.domain.util.parsePositiveIntOrDefault
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.presentation.mvi.HousePriceEvent
@@ -34,6 +36,11 @@ fun HousePriceScreen(
     modifier: Modifier = Modifier
 ) {
     val numeroCompratori = parsePositiveIntOrDefault(state.numeroCompratoriInput)
+    val prezzoCasa = parseInputOrDefault(state.prezzoCasaInput, 150000.0)
+    val richiestaMutuo = parseInputOrDefault(state.richiestaMutuoInput, 80.0).coerceIn(70.0, 100.0)
+    val importoMutuo = prezzoCasa * richiestaMutuo / 100.0
+    val richiestaMutuoSupportingText =
+        "${formatEuroAmount(importoMutuo)} · ${formatNumber(richiestaMutuo, 0)}% del prezzo casa"
     val expenseLabel = if (numeroCompratori == 1) {
         "Totale"
     } else {
@@ -58,11 +65,12 @@ fun HousePriceScreen(
                     topPadding = 0.dp
                 )
                 StepperInputField(
-                    label = "Anticipo",
-                    value = state.anticipoInput,
-                    onValueChange = { onIntent(HousePriceEvent.AnticipoChanged(it)) },
-                    onStep = { onIntent(HousePriceEvent.AnticipoStepped(it)) },
-                    suffix = "%"
+                    label = "Richiesta di mutuo",
+                    value = state.richiestaMutuoInput,
+                    onValueChange = { onIntent(HousePriceEvent.RichiestaMutuoChanged(it)) },
+                    onStep = { onIntent(HousePriceEvent.RichiestaMutuoStepped(it)) },
+                    suffix = "%",
+                    supportingText = richiestaMutuoSupportingText
                 )
                 if (state.isPercentuale) {
                     StepperInputField(
@@ -143,7 +151,7 @@ fun HousePriceScreen(
 
 private fun HousePriceViewState.toInput() = HousePriceInput(
     prezzoCasaInput = prezzoCasaInput,
-    anticipoInput = anticipoInput,
+    richiestaMutuoInput = richiestaMutuoInput,
     caparraInput = caparraInput,
     percentualeAgenziaInput = percentualeAgenziaInput,
     fissoAgenziaInput = fissoAgenziaInput,

@@ -25,7 +25,7 @@ class HousePriceViewModel(
         get() = calculateHousePriceUseCase(
             HousePriceInput(
                 prezzoCasaInput = state.prezzoCasaInput,
-                anticipoInput = state.anticipoInput,
+                richiestaMutuoInput = state.richiestaMutuoInput,
                 caparraInput = state.caparraInput,
                 percentualeAgenziaInput = state.percentualeAgenziaInput,
                 fissoAgenziaInput = state.fissoAgenziaInput,
@@ -50,14 +50,14 @@ class HousePriceViewModel(
                 state.copy(prezzoCasaInput = formatThousandsWithApostrophe(next.toInt()))
             }
 
-            is HousePriceEvent.AnticipoChanged ->
-                state.copy(anticipoInput = event.value)
+            is HousePriceEvent.RichiestaMutuoChanged ->
+                state.copy(richiestaMutuoInput = event.value)
 
-            is HousePriceEvent.AnticipoStepped -> {
-                val current = parseInputOrDefault(state.anticipoInput, 20.0)
-                val next = (current + event.direction * 5.0).coerceIn(0.0, 30.0)
+            is HousePriceEvent.RichiestaMutuoStepped -> {
+                val current = parseInputOrDefault(state.richiestaMutuoInput, 80.0)
+                val next = (current + event.direction * 5.0).coerceIn(70.0, 100.0)
                 state.copy(
-                    anticipoInput = formatNumber(next, 0),
+                    richiestaMutuoInput = formatNumber(next, 0),
                     tassoMutuoInput = tassoDefault(state.mutuoGreen, next)
                 )
             }
@@ -90,10 +90,10 @@ class HousePriceViewModel(
             }
 
             is HousePriceEvent.MutuoGreenChanged -> {
-                val anticipo = parseInputOrDefault(state.anticipoInput, 20.0).coerceIn(0.0, 30.0)
+                val richiestaMutuo = parseInputOrDefault(state.richiestaMutuoInput, 80.0).coerceIn(1.0, 100.0)
                 state.copy(
                     mutuoGreen = event.checked,
-                    tassoMutuoInput = tassoDefault(event.checked, anticipo)
+                    tassoMutuoInput = tassoDefault(event.checked, richiestaMutuo)
                 )
             }
 

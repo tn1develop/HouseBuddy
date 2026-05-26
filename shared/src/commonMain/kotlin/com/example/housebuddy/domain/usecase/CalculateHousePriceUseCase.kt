@@ -9,13 +9,14 @@ import com.example.housebuddy.domain.util.parseInputOrDefault
 class CalculateHousePriceUseCase {
     operator fun invoke(input: HousePriceInput): HousePriceResult {
         val prezzoCasa = parseInputOrDefault(input.prezzoCasaInput, 150000.0).coerceIn(80000.0, 200000.0)
-        val anticipo = parseInputOrDefault(input.anticipoInput, 20.0).coerceIn(0.0, 30.0)
+        val richiestaMutuo = parseInputOrDefault(input.richiestaMutuoInput, 80.0).coerceIn(1.0, 100.0)
+        val anticipo = 100.0 - richiestaMutuo
         val caparra = parseInputOrDefault(input.caparraInput, 5000.0).coerceAtLeast(0.0)
-        val percentualeAgenzia = parseInputOrDefault(input.percentualeAgenziaInput, 4.0).coerceIn(0.0, 5.0)
-        val fissoAgenzia = parseInputOrDefault(input.fissoAgenziaInput, 7000.0).coerceIn(0.0, 10000.0)
-        val tassoMutuo = parseInputOrDefault(input.tassoMutuoInput, 2.99).coerceIn(1.0, 5.0)
+        val percentualeAgenzia = parseInputOrDefault(input.percentualeAgenziaInput, 4.0).coerceIn(0.0, 50.0)
+        val fissoAgenzia = parseInputOrDefault(input.fissoAgenziaInput, 7000.0).coerceIn(0.0, 50000.0)
+        val tassoMutuo = parseInputOrDefault(input.tassoMutuoInput, 2.99).coerceIn(1.0, 50.0)
         val anniMutuo = parseInputOrDefault(input.anniMutuoInput, 30.0).toInt().coerceIn(5, 40)
-        val renditaCatastale = parseInputOrDefault(input.renditaCatastaleInput, 1071.0).coerceIn(0.0, 4000.0)
+        val renditaCatastale = parseInputOrDefault(input.renditaCatastaleInput, 1071.0).coerceIn(0.0, 40000.0)
 
         val impostaRegistro = renditaCatastale * 1.05 * 110 * 0.02
         val impostaIpotecaria = 50.0
@@ -31,7 +32,7 @@ class CalculateHousePriceUseCase {
         val perizia = 300.0
         val polizzaIncendioObbligatoria = 650.0
         val polizzaVita = 150.0
-        val soldiMutuo = prezzoCasa * ((100.0 - anticipo) / 100.0)
+        val soldiMutuo = prezzoCasa * (richiestaMutuo / 100.0)
         val notaioMutuo = soldiMutuo * 0.004 + 400.0
         val speseAvvioMutuo = istruttoria + impostaSostitutiva + perizia + polizzaIncendioObbligatoria + polizzaVita + notaioMutuo
         val quotaAgenzia = if (input.isPercentuale) prezzoCasa * (percentualeAgenzia / 100.0) else fissoAgenzia

@@ -5,14 +5,14 @@ import com.example.housebuddy.domain.util.tassoDefault
 
 data class HousePriceViewState(
     val prezzoCasaInput: String = formatThousandsWithApostrophe(139000),
-    val anticipoInput: String = "20",
+    val richiestaMutuoInput: String = "80",
     val caparraInput: String = "5000",
     val percentualeAgenziaInput: String = "5",
     val fissoAgenziaInput: String = "7000",
     val mutuoGreen: Boolean = false,
     val isPercentuale: Boolean = false,
     val numeroCompratoriInput: String = "1",
-    val tassoMutuoInput: String = tassoDefault(false, 20.0),
+    val tassoMutuoInput: String = tassoDefault(false, 80.0),
     val anniMutuoInput: String = "30",
     val renditaCatastaleInput: String = "1071"
 )

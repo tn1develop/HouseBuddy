@@ -52,11 +52,11 @@ fun formatEuroAmount(value: Double): String {
     return "€ $sign$integerPart.${parts[1]}"
 }
 
-fun tassoDefault(mutuoGreen: Boolean, anticipo: Double): String {
+fun tassoDefault(mutuoGreen: Boolean, richiestaMutuo: Double): String {
     return when {
-        mutuoGreen && anticipo >= 20.0 -> "2.59"
-        mutuoGreen && anticipo < 20.0 -> "2.86"
-        !mutuoGreen && anticipo >= 20.0 -> "2.99"
+        mutuoGreen && richiestaMutuo <= 80.0 -> "2.59"
+        mutuoGreen && richiestaMutuo > 80.0 -> "2.86"
+        !mutuoGreen && richiestaMutuo <= 80.0 -> "2.99"
         else -> "3.52"
     }
 }
