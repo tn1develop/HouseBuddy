@@ -49,6 +49,18 @@ fun ExchangeRateScreen(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        Text(
+            text = "Il tasso dell'Euribor è quello su cui si basano i tassi di mutuo in Europa." +
+                    "Al variare di esso, variano anche le rate dei mutui.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = "N.B. L'euribor non è il tasso di mutuo che ti farà la banca, è il tasso di riferimento su cui si basano i mutui. " +
+                    "Il tasso finale dipende da molti fattori, tra cui la tua situazione finanziaria e le politiche della banca.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
 
         when {
             state.isLoading -> {

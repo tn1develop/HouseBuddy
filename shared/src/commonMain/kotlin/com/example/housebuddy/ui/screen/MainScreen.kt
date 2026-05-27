@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.housebuddy.presentation.mvi.ExchangeRateViewModel
 import com.example.housebuddy.presentation.mvi.HousePriceViewModel
+import com.example.housebuddy.ui.screen.TransferScreen
 import com.example.housebuddy.ui.navigation.BottomNavDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,6 +93,9 @@ fun MainScreen(
             destination == BottomNavDestination.AndamentoStorico -> ExchangeRateScreen(
                 state = exchangeRateViewModel.state,
                 onIntent = exchangeRateViewModel::handleEvent,
+                modifier = Modifier.padding(innerPadding)
+            )
+            destination == BottomNavDestination.Trasferimento -> TransferScreen(
                 modifier = Modifier.padding(innerPadding)
             )
         }
