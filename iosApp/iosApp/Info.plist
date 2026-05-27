@@ -4,5 +4,15 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>HouseBuddy usa la rete locale per trovare dispositivi vicini e trasferire i settings.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>HouseBuddy usa Bluetooth LE per trovare dispositivi vicini e trasferire i settings.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>HouseBuddy usa Bluetooth LE per ricevere i settings da un altro dispositivo.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_housebuddytfr._tcp</string>
+	</array>
 </dict>
 </plist>
