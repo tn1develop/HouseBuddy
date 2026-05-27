@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
+            implementation(libs.androidx.navigation.compose)
             implementation(libs.multiplatform.settings)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.logging)
