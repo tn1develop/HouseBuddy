@@ -63,7 +63,7 @@ fun SettingsScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "Compriamo la casa in",
+                text = "N. Acquirenti",
                 modifier = Modifier.weight(1f)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
