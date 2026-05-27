@@ -12,8 +12,13 @@ fun initHousePriceSettings(context: Context) {
     applicationContext = context.applicationContext
 }
 
+internal fun requireHousePriceApplicationContext(): Context = applicationContext
+
+internal fun getHousePriceSharedPreferences() =
+    applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
 internal actual fun createHousePriceSettings(): Settings {
     return SharedPreferencesSettings(
-        applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        getHousePriceSharedPreferences()
     )
 }
