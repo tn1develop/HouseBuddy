@@ -22,7 +22,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.housebuddy.presentation.mvi.CarpeDiemViewModel
 import com.example.housebuddy.presentation.mvi.ExchangeRateViewModel
 import com.example.housebuddy.presentation.mvi.HousePriceViewModel
 import com.example.housebuddy.ui.navigation.AppDestination
@@ -32,8 +31,7 @@ import com.example.housebuddy.ui.navigation.BottomNavDestination
 @Composable
 fun MainScreen(
     viewModel: HousePriceViewModel = remember { HousePriceViewModel() },
-    exchangeRateViewModel: ExchangeRateViewModel = remember { ExchangeRateViewModel() },
-    carpeDiemViewModel: CarpeDiemViewModel = remember { CarpeDiemViewModel() }
+    exchangeRateViewModel: ExchangeRateViewModel = remember { ExchangeRateViewModel() }
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -127,8 +125,8 @@ fun MainScreen(
             }
             composable(AppDestination.CarpeDiem) {
                 CarpeDiemScreen(
-                    state = carpeDiemViewModel.state,
-                    onIntent = carpeDiemViewModel::handleEvent
+                    state = viewModel.state,
+                    onIntent = viewModel::handleEvent
                 )
             }
             composable(AppDestination.TransferReceive) {

@@ -31,4 +31,13 @@ sealed interface HousePriceEvent {
     data class RenditaCatastaleStepped(val direction: Int) : HousePriceEvent
 
     data object ReloadFromStorage : HousePriceEvent
+
+    data class CanoneAffittoChanged(val value: String) : HousePriceEvent
+    data class CanoneAffittoStepped(val direction: Int) : HousePriceEvent
+
+    data class LiquiditaAttualeChanged(val value: String) : HousePriceEvent
+    data class LiquiditaAttualeStepped(val direction: Int) : HousePriceEvent
+
+    data class RisparmioAnnualeChanged(val value: String) : HousePriceEvent
+    data class RisparmioAnnualeStepped(val direction: Int) : HousePriceEvent
 }

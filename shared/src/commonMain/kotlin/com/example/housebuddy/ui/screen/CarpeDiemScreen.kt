@@ -8,14 +8,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.housebuddy.presentation.mvi.CarpeDiemEvent
-import com.example.housebuddy.presentation.mvi.CarpeDiemViewState
+import com.example.housebuddy.presentation.mvi.HousePriceEvent
+import com.example.housebuddy.presentation.mvi.HousePriceViewState
 import com.example.housebuddy.ui.components.StepperInputField
 
 @Composable
 fun CarpeDiemScreen(
-    state: CarpeDiemViewState = CarpeDiemViewState(),
-    onIntent: (CarpeDiemEvent) -> Unit = {},
+    state: HousePriceViewState,
+    onIntent: (HousePriceEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -30,23 +30,23 @@ fun CarpeDiemScreen(
             StepperInputField(
                 label = "Canone affitto (no bollette)",
                 value = state.canoneAffittoInput,
-                onValueChange = { onIntent(CarpeDiemEvent.CanoneAffittoChanged(it)) },
-                onStep = { onIntent(CarpeDiemEvent.CanoneAffittoStepped(it)) },
+                onValueChange = { onIntent(HousePriceEvent.CanoneAffittoChanged(it)) },
+                onStep = { onIntent(HousePriceEvent.CanoneAffittoStepped(it)) },
                 suffix = "EUR",
                 topPadding = 0.dp
             )
             StepperInputField(
                 label = "Liquidità attuale",
                 value = state.liquiditaAttualeInput,
-                onValueChange = { onIntent(CarpeDiemEvent.LiquiditaAttualeChanged(it)) },
-                onStep = { onIntent(CarpeDiemEvent.LiquiditaAttualeStepped(it)) },
+                onValueChange = { onIntent(HousePriceEvent.LiquiditaAttualeChanged(it)) },
+                onStep = { onIntent(HousePriceEvent.LiquiditaAttualeStepped(it)) },
                 suffix = "EUR"
             )
             StepperInputField(
                 label = "Risparmio annuale",
                 value = state.risparmioAnnualeInput,
-                onValueChange = { onIntent(CarpeDiemEvent.RisparmioAnnualeChanged(it)) },
-                onStep = { onIntent(CarpeDiemEvent.RisparmioAnnualeStepped(it)) },
+                onValueChange = { onIntent(HousePriceEvent.RisparmioAnnualeChanged(it)) },
+                onStep = { onIntent(HousePriceEvent.RisparmioAnnualeStepped(it)) },
                 suffix = "EUR"
             )
         }

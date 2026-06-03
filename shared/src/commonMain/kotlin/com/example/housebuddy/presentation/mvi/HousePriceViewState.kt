@@ -14,5 +14,8 @@ data class HousePriceViewState(
     val numeroCompratoriInput: String = "1",
     val tassoMutuoInput: String = tassoDefault(false, 80.0),
     val anniMutuoInput: String = "30",
-    val renditaCatastaleInput: String = "1071"
+    val renditaCatastaleInput: String = "1071",
+    val canoneAffittoInput: String = formatThousandsWithApostrophe(800),
+    val liquiditaAttualeInput: String = formatThousandsWithApostrophe(20_000),
+    val risparmioAnnualeInput: String = formatThousandsWithApostrophe(10_000)
 )

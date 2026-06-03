@@ -54,6 +54,18 @@ class HousePriceStateStorage(
             renditaCatastaleInput = settings.getString(
                 HousePriceSettingsKeys.RENDITA_CATASTALE_INPUT,
                 defaults.renditaCatastaleInput
+            ),
+            canoneAffittoInput = settings.getString(
+                HousePriceSettingsKeys.CANONE_AFFITTO_INPUT,
+                defaults.canoneAffittoInput
+            ),
+            liquiditaAttualeInput = settings.getString(
+                HousePriceSettingsKeys.LIQUIDITA_ATTUALE_INPUT,
+                defaults.liquiditaAttualeInput
+            ),
+            risparmioAnnualeInput = settings.getString(
+                HousePriceSettingsKeys.RISPARMIO_ANNUALE_INPUT,
+                defaults.risparmioAnnualeInput
             )
         )
     }
@@ -70,5 +82,8 @@ class HousePriceStateStorage(
         settings.putString(HousePriceSettingsKeys.TASSO_MUTUO_INPUT, state.tassoMutuoInput)
         settings.putString(HousePriceSettingsKeys.ANNI_MUTUO_INPUT, state.anniMutuoInput)
         settings.putString(HousePriceSettingsKeys.RENDITA_CATASTALE_INPUT, state.renditaCatastaleInput)
+        settings.putString(HousePriceSettingsKeys.CANONE_AFFITTO_INPUT, state.canoneAffittoInput)
+        settings.putString(HousePriceSettingsKeys.LIQUIDITA_ATTUALE_INPUT, state.liquiditaAttualeInput)
+        settings.putString(HousePriceSettingsKeys.RISPARMIO_ANNUALE_INPUT, state.risparmioAnnualeInput)
     }
 }

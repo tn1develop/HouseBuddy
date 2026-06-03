@@ -14,4 +14,7 @@ internal object HousePriceSettingsKeys {
     const val TASSO_MUTUO_INPUT = "tasso_mutuo_input"
     const val ANNI_MUTUO_INPUT = "anni_mutuo_input"
     const val RENDITA_CATASTALE_INPUT = "rendita_catastale_input"
+    const val CANONE_AFFITTO_INPUT = "canone_affitto_input"
+    const val LIQUIDITA_ATTUALE_INPUT = "liquidita_attuale_input"
+    const val RISPARMIO_ANNUALE_INPUT = "risparmio_annuale_input"
 }
