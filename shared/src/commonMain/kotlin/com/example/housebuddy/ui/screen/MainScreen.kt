@@ -119,7 +119,8 @@ fun MainScreen(
             }
             composable(AppDestination.TransferReceive) {
                 ReceiveTransferScreen(
-                    onChangeDirection = { navController.popBackStack() }
+                    onChangeDirection = { navController.popBackStack() },
+                    onIntent = viewModel::handleEvent
                 )
             }
             composable(AppDestination.TransferSend) {

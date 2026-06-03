@@ -144,6 +144,8 @@ class HousePriceViewModel(
                 val next = (current + event.direction).coerceIn(0.0, 4000.0)
                 state.copy(renditaCatastaleInput = next.toString())
             }
+
+            HousePriceEvent.ReloadFromStorage -> stateStorage.load()
         }
         state = newState
         stateStorage.save(newState)

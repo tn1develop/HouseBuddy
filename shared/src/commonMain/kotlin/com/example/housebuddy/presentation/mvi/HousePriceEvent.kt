@@ -29,4 +29,6 @@ sealed interface HousePriceEvent {
 
     data class RenditaCatastaleChanged(val value: String) : HousePriceEvent
     data class RenditaCatastaleStepped(val direction: Int) : HousePriceEvent
+
+    data object ReloadFromStorage : HousePriceEvent
 }

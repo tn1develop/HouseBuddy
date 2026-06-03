@@ -29,6 +29,7 @@ fun BluetoothConnectionScreen(
     waitingForScreen: String,
     mode: TransferMode,
     onChangeDirection: () -> Unit,
+    onTransferCompleted: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val controller = rememberBluetoothTransferController(mode)
@@ -39,6 +40,11 @@ fun BluetoothConnectionScreen(
     }
     DisposableEffect(mode) {
         onDispose { controller.stop() }
+    }
+    LaunchedEffect(uiState.completed, mode) {
+        if (mode == TransferMode.Receive && uiState.completed) {
+            onTransferCompleted()
+        }
     }
 
     val waitingText = "Tieni aperta anche la schermata \"$waitingForScreen\" sull'altro telefono."
