@@ -15,13 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
 import com.example.housebuddy.domain.util.formatEuroAmount
 import com.example.housebuddy.domain.util.formatNumber
 import com.example.housebuddy.domain.util.parseInputOrDefault
 import com.example.housebuddy.domain.util.parsePositiveIntOrDefault
-import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.presentation.mvi.HousePriceEvent
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
 import com.example.housebuddy.ui.components.InfoIcon
@@ -31,7 +29,7 @@ import com.example.housebuddy.ui.components.StepperInputField
 @Composable
 fun HousePriceScreen(
     state: HousePriceViewState = HousePriceViewState(),
-    result: HousePriceResult = CalculateHousePriceUseCase().invoke(state.toInput()),
+    result: HousePriceResult,
     onIntent: (HousePriceEvent) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -148,18 +146,6 @@ fun HousePriceScreen(
             }
     }
 }
-
-private fun HousePriceViewState.toInput() = HousePriceInput(
-    prezzoCasaInput = prezzoCasaInput,
-    richiestaMutuoInput = richiestaMutuoInput,
-    caparraInput = caparraInput,
-    percentualeAgenziaInput = percentualeAgenziaInput,
-    fissoAgenziaInput = fissoAgenziaInput,
-    isPercentuale = isPercentuale,
-    tassoMutuoInput = tassoMutuoInput,
-    anniMutuoInput = anniMutuoInput,
-    renditaCatastaleInput = renditaCatastaleInput
-)
 
 private fun buildInfoText(result: HousePriceResult): String {
     return  "spese principali:\n" +

@@ -4,9 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.housebuddy.data.local.HousePriceStateStorage
-import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
+import com.example.housebuddy.domain.model.SimulateScenariosResult
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
+import com.example.housebuddy.domain.usecase.SimulateScenariosUseCase
 import com.example.housebuddy.domain.util.formatNumber
 import com.example.housebuddy.domain.util.formatThousandsWithApostrophe
 import com.example.housebuddy.domain.util.parseInputOrDefault
@@ -16,25 +17,17 @@ import kotlin.math.round
 
 class HousePriceViewModel(
     private val calculateHousePriceUseCase: CalculateHousePriceUseCase = CalculateHousePriceUseCase(),
+    private val simulateScenariosUseCase: SimulateScenariosUseCase = SimulateScenariosUseCase(),
     private val stateStorage: HousePriceStateStorage = HousePriceStateStorage()
 ) {
     var state by mutableStateOf(stateStorage.load())
         private set
 
     val result: HousePriceResult
-        get() = calculateHousePriceUseCase(
-            HousePriceInput(
-                prezzoCasaInput = state.prezzoCasaInput,
-                richiestaMutuoInput = state.richiestaMutuoInput,
-                caparraInput = state.caparraInput,
-                percentualeAgenziaInput = state.percentualeAgenziaInput,
-                fissoAgenziaInput = state.fissoAgenziaInput,
-                isPercentuale = state.isPercentuale,
-                tassoMutuoInput = state.tassoMutuoInput,
-                anniMutuoInput = state.anniMutuoInput,
-                renditaCatastaleInput = state.renditaCatastaleInput
-            )
-        )
+        get() = calculateHousePriceUseCase(state.toHousePriceInput())
+
+    val scenarioResult: SimulateScenariosResult
+        get() = simulateScenariosUseCase(state.toSimulateScenariosInput())
 
     fun handleEvent(event: HousePriceEvent) {
         val newState = when (event) {

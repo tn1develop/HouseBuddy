@@ -126,6 +126,7 @@ fun MainScreen(
             composable(AppDestination.CarpeDiem) {
                 CarpeDiemScreen(
                     state = viewModel.state,
+                    scenarioResult = viewModel.scenarioResult,
                     onIntent = viewModel::handleEvent
                 )
             }
