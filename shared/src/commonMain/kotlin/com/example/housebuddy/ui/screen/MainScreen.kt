@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.housebuddy.presentation.mvi.CarpeDiemViewModel
 import com.example.housebuddy.presentation.mvi.ExchangeRateViewModel
 import com.example.housebuddy.presentation.mvi.HousePriceViewModel
 import com.example.housebuddy.ui.navigation.AppDestination
@@ -31,7 +32,8 @@ import com.example.housebuddy.ui.navigation.BottomNavDestination
 @Composable
 fun MainScreen(
     viewModel: HousePriceViewModel = remember { HousePriceViewModel() },
-    exchangeRateViewModel: ExchangeRateViewModel = remember { ExchangeRateViewModel() }
+    exchangeRateViewModel: ExchangeRateViewModel = remember { ExchangeRateViewModel() },
+    carpeDiemViewModel: CarpeDiemViewModel = remember { CarpeDiemViewModel() }
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -111,10 +113,22 @@ fun MainScreen(
                     onIntent = exchangeRateViewModel::handleEvent
                 )
             }
-            composable(BottomNavDestination.Trasferimento.route) {
+            composable(BottomNavDestination.Menu.route) {
+                MenuScreen(
+                    onTransferClick = { navController.navigate(AppDestination.Transfer) },
+                    onCarpeDiemClick = { navController.navigate(AppDestination.CarpeDiem) }
+                )
+            }
+            composable(AppDestination.Transfer) {
                 TransferScreen(
                     onReceiveClick = { navController.navigate(AppDestination.TransferReceive) },
                     onSendClick = { navController.navigate(AppDestination.TransferSend) }
+                )
+            }
+            composable(AppDestination.CarpeDiem) {
+                CarpeDiemScreen(
+                    state = carpeDiemViewModel.state,
+                    onIntent = carpeDiemViewModel::handleEvent
                 )
             }
             composable(AppDestination.TransferReceive) {
@@ -142,8 +156,10 @@ private fun NavDestination?.isOnDestination(item: BottomNavDestination): Boolean
     if (this == null) return false
     return hierarchy.any { destination ->
         when (item) {
-            BottomNavDestination.Trasferimento ->
+            BottomNavDestination.Menu ->
                 destination.route == item.route ||
+                    destination.route == AppDestination.Transfer ||
+                    destination.route == AppDestination.CarpeDiem ||
                     destination.route == AppDestination.TransferReceive ||
                     destination.route == AppDestination.TransferSend
 
@@ -165,10 +181,12 @@ private fun NavDestination?.isTopLevelDestination(): Boolean {
 private fun NavDestination?.resolveTopBarTitle(): String {
     return when (this?.route) {
         AppDestination.Settings -> "Impostazioni"
+        AppDestination.Transfer -> "Trasferimento"
+        AppDestination.CarpeDiem -> "Carpe diem"
         AppDestination.TransferReceive -> "Ricevi trasferimento"
         AppDestination.TransferSend -> "Invia trasferimento"
         BottomNavDestination.AndamentoStorico.route -> BottomNavDestination.AndamentoStorico.label
-        BottomNavDestination.Trasferimento.route -> BottomNavDestination.Trasferimento.label
+        BottomNavDestination.Menu.route -> BottomNavDestination.Menu.label
         else -> BottomNavDestination.Calcolo.label
     }
 }

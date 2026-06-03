@@ -1,9 +1,9 @@
 package com.example.housebuddy.ui.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.SwapHoriz
-import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class BottomNavDestination(
@@ -12,6 +12,6 @@ enum class BottomNavDestination(
     val icon: ImageVector
 ) {
     Calcolo(route = "calcolo", label = "Calcolo", icon = Icons.Default.Home),
-    AndamentoStorico(route = "storico", label = "Storico", icon = Icons.AutoMirrored.Filled.List),
-    Trasferimento(route = "trasferimento", label = "Trasferimento", icon = Icons.Default.SwapHoriz),
+    AndamentoStorico(route = "storico", label = "Storico", icon = Icons.AutoMirrored.Filled.TrendingUp ),
+    Menu(route = "menu", label = "Menu", icon = Icons.Default.Menu),
 }
