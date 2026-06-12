@@ -148,23 +148,34 @@ fun HousePriceScreen(
 }
 
 private fun buildInfoText(result: HousePriceResult): String {
-    return  "spese principali:\n" +
-        "- Caparra ${formatEuroAmount(result.breakdown.caparra)}\n" +
-        "- Anticipo tolta la caparra ${formatEuroAmount(result.breakdown.anticipoToltaCaparra)}\n" +
-        "- Agenzia con Iva ${formatEuroAmount(result.breakdown.agenziaConIva)}\n\n" +
-            "mutuo:  \n" +
-        "- istruttoria ${formatEuroAmount(result.breakdown.istruttoria)}\n" +
-        "- imposta sostitutiva ${formatEuroAmount(result.breakdown.impostaSostitutiva)}\n" +
-        "- perizia ${formatEuroAmount(result.breakdown.perizia)}\n " +
-        "- assicurazione incendio ${formatEuroAmount(result.breakdown.polizzaIncendioObbligatoria)}\n " +
-        "- assicurazione vita ${formatEuroAmount(result.breakdown.polizzaVita)}\n" +
-        "- notaio mutuo ${formatEuroAmount(result.breakdown.notaioMutuo)}\n\n" +
-            "notaio acquisto:\n" +
-        "- Imposta di registro ${formatEuroAmount(result.breakdown.impostaRegistro)}\n" +
-        "- Imposta ipotecaria ${formatEuroAmount(result.breakdown.impostaIpotecaria)}\n" +
-        "- Imposta catastale ${formatEuroAmount(result.breakdown.impostaCatastale)}\n" +
-        "- Tassa archivio ${formatEuroAmount(result.breakdown.tassaArchivio)}\n" +
-        "- Onorario, scritturazione, diritti di copia ${formatEuroAmount(result.breakdown.onorarioScritturazioneDirittiCopia)}\n" +
-        "- Contributo CNN, Consiglio, Cassa, Iscrizione a repertorio ${formatEuroAmount(result.breakdown.contributoCNNConsiglioCassaIscrizioneRepertorio)}\n" +
-        "- Visure ipotecarie ${formatEuroAmount(result.breakdown.visureIpotecarie)}"
+    val b = result.breakdown
+    val totSpesePrincipali = b.caparra + b.anticipoToltaCaparra + b.agenziaConIva
+    val totMutuo = b.istruttoria + b.impostaSostitutiva + b.perizia +
+        b.polizzaIncendioObbligatoria + b.polizzaVita + b.notaioMutuo
+    val totNotaioAcquisto = b.impostaRegistro + b.impostaIpotecaria + b.impostaCatastale +
+        b.tassaArchivio + b.onorarioScritturazioneDirittiCopia +
+        b.contributoCNNConsiglioCassaIscrizioneRepertorio + b.visureIpotecarie
+
+    return "spese principali:\n" +
+        "- Caparra ${formatEuroAmount(b.caparra)}\n" +
+        "- Anticipo tolta la caparra ${formatEuroAmount(b.anticipoToltaCaparra)}\n" +
+        "- Agenzia con Iva ${formatEuroAmount(b.agenziaConIva)}\n" +
+        "TOT: ${formatEuroAmount(totSpesePrincipali)}\n\n" +
+        "mutuo:\n" +
+        "- istruttoria ${formatEuroAmount(b.istruttoria)}\n" +
+        "- imposta sostitutiva ${formatEuroAmount(b.impostaSostitutiva)}\n" +
+        "- perizia ${formatEuroAmount(b.perizia)}\n" +
+        "- assicurazione incendio ${formatEuroAmount(b.polizzaIncendioObbligatoria)}\n" +
+        "- assicurazione vita ${formatEuroAmount(b.polizzaVita)}\n" +
+        "- notaio mutuo ${formatEuroAmount(b.notaioMutuo)}\n" +
+        "TOT: ${formatEuroAmount(totMutuo)}\n\n" +
+        "notaio acquisto:\n" +
+        "- Imposta di registro ${formatEuroAmount(b.impostaRegistro)}\n" +
+        "- Imposta ipotecaria ${formatEuroAmount(b.impostaIpotecaria)}\n" +
+        "- Imposta catastale ${formatEuroAmount(b.impostaCatastale)}\n" +
+        "- Tassa archivio ${formatEuroAmount(b.tassaArchivio)}\n" +
+        "- Onorario, scritturazione, diritti di copia ${formatEuroAmount(b.onorarioScritturazioneDirittiCopia)}\n" +
+        "- Contributo CNN, Consiglio, Cassa, Iscrizione a repertorio ${formatEuroAmount(b.contributoCNNConsiglioCassaIscrizioneRepertorio)}\n" +
+        "- Visure ipotecarie ${formatEuroAmount(b.visureIpotecarie)}\n" +
+        "TOT: ${formatEuroAmount(totNotaioAcquisto)}"
 }
