@@ -8,15 +8,15 @@ import com.example.housebuddy.domain.util.parseInputOrDefault
 
 class CalculateHousePriceUseCase {
     operator fun invoke(input: HousePriceInput): HousePriceResult {
-        val prezzoCasa = parseInputOrDefault(input.prezzoCasaInput, 150000.0).coerceIn(80000.0, 200000.0)
-        val richiestaMutuo = parseInputOrDefault(input.richiestaMutuoInput, 80.0).coerceIn(1.0, 100.0)
+        val prezzoCasa = parseInputOrDefault(input.prezzoCasaInput, 150000.0).coerceAtLeast(0.0)
+        val richiestaMutuo = parseInputOrDefault(input.richiestaMutuoInput, 80.0).coerceIn(0.0, 100.0)
         val anticipo = 100.0 - richiestaMutuo
         val caparra = parseInputOrDefault(input.caparraInput, 5000.0).coerceAtLeast(0.0)
-        val percentualeAgenzia = parseInputOrDefault(input.percentualeAgenziaInput, 4.0).coerceIn(0.0, 50.0)
-        val fissoAgenzia = parseInputOrDefault(input.fissoAgenziaInput, 7000.0).coerceIn(0.0, 50000.0)
-        val tassoMutuo = parseInputOrDefault(input.tassoMutuoInput, 2.99).coerceIn(1.0, 50.0)
+        val percentualeAgenzia = parseInputOrDefault(input.percentualeAgenziaInput, 4.0).coerceAtLeast(0.0)
+        val fissoAgenzia = parseInputOrDefault(input.fissoAgenziaInput, 7000.0).coerceAtLeast(0.0)
+        val tassoMutuo = parseInputOrDefault(input.tassoMutuoInput, 2.99).coerceAtLeast(0.0)
         val anniMutuo = parseInputOrDefault(input.anniMutuoInput, 30.0).toInt().coerceIn(5, 40)
-        val renditaCatastale = parseInputOrDefault(input.renditaCatastaleInput, 1071.0).coerceIn(0.0, 40000.0)
+        val renditaCatastale = parseInputOrDefault(input.renditaCatastaleInput, 1071.0).coerceAtLeast(0.0)
 
         val impostaRegistro = renditaCatastale * 1.05 * 110 * 0.02
         val impostaIpotecaria = 50.0

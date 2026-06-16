@@ -39,7 +39,7 @@ class HousePriceViewModel(
 
             is HousePriceEvent.PrezzoCasaStepped -> {
                 val current = parseInputOrDefault(state.prezzoCasaInput, 150000.0)
-                val next = (current + event.direction * 1000.0).coerceIn(80000.0, 300000.0)
+                val next = (current + event.direction * 1000.0).coerceAtLeast(0.0)
                 state.copy(prezzoCasaInput = formatThousandsWithApostrophe(next.toInt()))
             }
 
@@ -48,7 +48,7 @@ class HousePriceViewModel(
 
             is HousePriceEvent.RichiestaMutuoStepped -> {
                 val current = parseInputOrDefault(state.richiestaMutuoInput, 80.0)
-                val next = (current + event.direction * 5.0).coerceIn(70.0, 100.0)
+                val next = (current + event.direction * 5.0).coerceAtLeast(0.0)
                 state.copy(
                     richiestaMutuoInput = formatNumber(next, 0),
                     tassoMutuoInput = tassoDefault(state.mutuoGreen, next)
@@ -69,7 +69,7 @@ class HousePriceViewModel(
 
             is HousePriceEvent.PercentualeAgenziaStepped -> {
                 val current = parseInputOrDefault(state.percentualeAgenziaInput, 5.0)
-                val next = (current + event.direction).coerceIn(0.0, 10.0)
+                val next = (current + event.direction).coerceAtLeast(0.0)
                 state.copy(percentualeAgenziaInput = formatNumber(next, 0))
             }
 
@@ -78,7 +78,7 @@ class HousePriceViewModel(
 
             is HousePriceEvent.FissoAgenziaStepped -> {
                 val current = parseInputOrDefault(state.fissoAgenziaInput, 7000.0)
-                val next = (current + event.direction * 1000.0).coerceIn(0.0, 10000.0)
+                val next = (current + event.direction * 1000.0).coerceAtLeast(0.0)
                 state.copy(fissoAgenziaInput = formatNumber(next, 0))
             }
 
@@ -115,7 +115,7 @@ class HousePriceViewModel(
             is HousePriceEvent.TassoMutuoStepped -> {
                 val defaultRate = if (state.mutuoGreen) 2.59 else 2.99
                 val current = parseInputOrDefault(state.tassoMutuoInput, defaultRate)
-                val next = (current + event.direction * 0.5).coerceIn(1.0, 5.0)
+                val next = (current + event.direction * 0.5).coerceAtLeast(0.0)
                 val rounded = round(next * 100.0) / 100.0
                 state.copy(tassoMutuoInput = formatNumber(rounded, 2))
             }
@@ -134,7 +134,7 @@ class HousePriceViewModel(
 
             is HousePriceEvent.RenditaCatastaleStepped -> {
                 val current = parseInputOrDefault(state.renditaCatastaleInput, 30.0)
-                val next = (current + event.direction).coerceIn(0.0, 4000.0)
+                val next = (current + event.direction).coerceAtLeast(0.0)
                 state.copy(renditaCatastaleInput = next.toString())
             }
 
