@@ -107,13 +107,13 @@ private class ScenarioMirroredBarChartView @JvmOverloads constructor(
         val centerY = height / 2f
         val halfBand = centerBandHeightPx / 2f
         val maxBarHeight = max((height - centerBandHeightPx) / 2f, 0f)
-        val maxValue = items.mapNotNull { it.costoTotaleCasa }.maxOrNull() ?: 0.0
+        val maxValue = items.mapNotNull { it.totalHouseCost }.maxOrNull() ?: 0.0
         val scaleMax = max(maxValue, 1.0)
 
         items.forEachIndexed { index, item ->
             val left = index * columnWidthPx.toFloat()
             val right = left + columnWidthPx
-            val barHeight = item.costoTotaleCasa?.let { value ->
+            val barHeight = item.totalHouseCost?.let { value ->
                 (value / scaleMax * maxBarHeight).toFloat()
             } ?: 0f
 

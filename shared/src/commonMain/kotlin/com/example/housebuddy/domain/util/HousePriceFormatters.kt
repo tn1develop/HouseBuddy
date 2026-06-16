@@ -52,26 +52,28 @@ fun formatEuroAmount(value: Double): String {
     return "€ $sign$integerPart.${parts[1]}"
 }
 
-fun tassoDefault(mutuoGreen: Boolean, richiestaMutuo: Double): String {
+/** mutuo green: Italian green mortgage; richiesta mutuo: mortgage request as % of house price */
+fun defaultMortgageRate(greenMortgage: Boolean, mortgageRequestPercent: Double): String {
     return when {
-        mutuoGreen && richiestaMutuo <= 80.0 -> "2.59"
-        mutuoGreen && richiestaMutuo > 80.0 -> "2.86"
-        !mutuoGreen && richiestaMutuo <= 80.0 -> "2.99"
+        greenMortgage && mortgageRequestPercent <= 80.0 -> "2.59"
+        greenMortgage && mortgageRequestPercent > 80.0 -> "2.86"
+        !greenMortgage && mortgageRequestPercent <= 80.0 -> "2.99"
         else -> "3.52"
     }
 }
 
-fun calcolaRataMutuo(
-    importo: Double,
-    tassoAnnuo: Double,
-    durataAnni: Int
+/** rata mutuo: monthly mortgage installment */
+fun calculateMonthlyMortgagePayment(
+    amount: Double,
+    annualRate: Double,
+    durationYears: Int
 ): Double {
-    if (importo <= 0 || tassoAnnuo < 0 || durataAnni <= 0) return 0.0
+    if (amount <= 0 || annualRate < 0 || durationYears <= 0) return 0.0
 
-    val tassoMensile = tassoAnnuo / 100.0 / 12.0
-    val numeroRate = durataAnni * 12
-    if (tassoMensile == 0.0) return importo / numeroRate
+    val monthlyRate = annualRate / 100.0 / 12.0
+    val numberOfInstallments = durationYears * 12
+    if (monthlyRate == 0.0) return amount / numberOfInstallments
 
-    val fattore = (1 + tassoMensile).pow(numeroRate.toDouble())
-    return importo * (tassoMensile * fattore) / (fattore - 1)
+    val factor = (1 + monthlyRate).pow(numberOfInstallments.toDouble())
+    return amount * (monthlyRate * factor) / (factor - 1)
 }

@@ -13,7 +13,7 @@ import com.example.housebuddy.domain.model.SimulateScenariosResult
 
 data class ScenarioBarChartItem(
     val year: Int,
-    val costoTotaleCasa: Double?,
+    val totalHouseCost: Double?,
     val convenienceRank: ScenarioBarConvenienceRank = ScenarioBarConvenienceRank.None
 )
 
@@ -41,13 +41,13 @@ fun SimulateScenariosResult.toBarChartItems(): List<ScenarioBarChartItem> =
     scenariosByYear.entries
         .sortedBy { it.key }
         .map { (year, result) ->
-            ScenarioBarChartItem(year = year, costoTotaleCasa = result?.costoTotaleCasa)
+            ScenarioBarChartItem(year = year, totalHouseCost = result?.totalHouseCost)
         }
         .withConvenienceRanks()
 
 private fun List<ScenarioBarChartItem>.withConvenienceRanks(): List<ScenarioBarChartItem> {
     val indexedCosts = mapIndexedNotNull { index, item ->
-        item.costoTotaleCasa?.let { index to it }
+        item.totalHouseCost?.let { index to it }
     }
 
     val mostConvenientIndices = indexedCosts

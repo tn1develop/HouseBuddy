@@ -1,40 +1,53 @@
 package com.example.housebuddy.domain.model
 
 data class HousePriceInput(
-    val prezzoCasaInput: String,
-    val richiestaMutuoInput: String,
-    val caparraInput: String,
-    val percentualeAgenziaInput: String,
-    val fissoAgenziaInput: String,
-    val isPercentuale: Boolean,
-    val tassoMutuoInput: String,
-    val anniMutuoInput: String,
-    val renditaCatastaleInput: String
+    val housePriceInput: String,
+    val mortgageRequestInput: String,
+    /** caparra: reservation deposit paid to the seller */
+    val depositInput: String,
+    val agencyPercentageInput: String,
+    val agencyFixedFeeInput: String,
+    val isAgencyCommissionPercentage: Boolean,
+    val mortgageRateInput: String,
+    val mortgageYearsInput: String,
+    /** rendita catastale: official cadastral income assigned to the property */
+    val cadastralIncomeInput: String
 )
 
 data class HousePriceBreakdown(
-    val caparra: Double,
-    val anticipoToltaCaparra: Double,
-    val agenziaConIva: Double,
-    val impostaRegistro: Double,
-    val impostaIpotecaria: Double,
-    val impostaCatastale: Double,
-    val tassaArchivio: Double,
-    val onorarioScritturazioneDirittiCopia: Double,
-    val contributoCNNConsiglioCassaIscrizioneRepertorio: Double,
-    val visureIpotecarie: Double,
-    val istruttoria: Double,
-    val impostaSostitutiva: Double,
-    val perizia: Double,
-    val polizzaIncendioObbligatoria: Double,
-    val polizzaVita: Double,
-    val notaioMutuo: Double
+    /** caparra: reservation deposit paid to the seller */
+    val deposit: Double,
+    val downPaymentMinusDeposit: Double,
+    val agencyFeeWithVat: Double,
+    /** imposta di registro: registration tax */
+    val registrationTax: Double,
+    /** imposta ipotecaria: mortgage registry tax */
+    val mortgageRegistryTax: Double,
+    /** imposta catastale: cadastral tax */
+    val cadastralTax: Double,
+    val archiveFee: Double,
+    val notaryDraftingAndCopyFees: Double,
+    val notaryRegulatoryContributions: Double,
+    /** visure ipotecarie: mortgage registry searches */
+    val mortgageRegistrySearches: Double,
+    /** istruttoria: mortgage application fee */
+    val applicationFee: Double,
+    /** imposta sostitutiva: flat substitute tax on the mortgage */
+    val substituteTax: Double,
+    /** perizia: property appraisal */
+    val appraisal: Double,
+    val mandatoryFireInsurance: Double,
+    val lifeInsurance: Double,
+    /** notaio mutuo: notary fees for the mortgage deed */
+    val mortgageNotaryFee: Double
 )
 
 data class HousePriceResult(
-    val soldiSubito: Double,
-    val soldiMutuo: Double,
-    val rataMutuo: Double,
-    val costoTotaleCasa: Double,
+    /** soldi subito: cash needed at or before closing */
+    val upfrontCashNeeded: Double,
+    val mortgageLoanAmount: Double,
+    /** rata mutuo: monthly mortgage installment */
+    val monthlyMortgagePayment: Double,
+    val totalHouseCost: Double,
     val breakdown: HousePriceBreakdown
 )

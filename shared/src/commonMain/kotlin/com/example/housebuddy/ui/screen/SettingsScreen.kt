@@ -44,15 +44,15 @@ fun SettingsScreen(
         ) {
             Text(text = "Mutuo Green (classe A o B)")
             Switch(
-                checked = state.mutuoGreen,
-                onCheckedChange = { onIntent(HousePriceEvent.MutuoGreenChanged(it)) }
+                checked = state.greenMortgage,
+                onCheckedChange = { onIntent(HousePriceEvent.GreenMortgageChanged(it)) }
             )
         }
         MyDropdown(
             label = "Provvigione Agenzia",
             options = agencyCommissionOptions,
-            selectedOption = if (state.isPercentuale) "Percentuale" else "Importo Fisso",
-            onOptionSelected = { onIntent(HousePriceEvent.IsPercentualeChanged(it == "Percentuale")) },
+            selectedOption = if (state.isAgencyCommissionPercentage) "Percentuale" else "Importo Fisso",
+            onOptionSelected = { onIntent(HousePriceEvent.AgencyCommissionTypeChanged(it == "Percentuale")) },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         )
         Row(
@@ -67,47 +67,47 @@ fun SettingsScreen(
                 modifier = Modifier.weight(1f)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { onIntent(HousePriceEvent.NumeroCompratoriStepped(-1)) }) {
+                IconButton(onClick = { onIntent(HousePriceEvent.NumberOfBuyersStepped(-1)) }) {
                     Text("-")
                 }
                 OutlinedTextField(
-                    value = state.numeroCompratoriInput,
-                    onValueChange = { onIntent(HousePriceEvent.NumeroCompratoriChanged(it)) },
+                    value = state.numberOfBuyersInput,
+                    onValueChange = { onIntent(HousePriceEvent.NumberOfBuyersChanged(it)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.width(56.dp)
                 )
-                IconButton(onClick = { onIntent(HousePriceEvent.NumeroCompratoriStepped(1)) }) {
+                IconButton(onClick = { onIntent(HousePriceEvent.NumberOfBuyersStepped(1)) }) {
                     Text("+")
                 }
             }
         }
         StepperInputField(
             label = "Tasso mutuo",
-            value = state.tassoMutuoInput,
-            onValueChange = { onIntent(HousePriceEvent.TassoMutuoChanged(it)) },
-            onStep = { onIntent(HousePriceEvent.TassoMutuoStepped(it)) },
+            value = state.mortgageRateInput,
+            onValueChange = { onIntent(HousePriceEvent.MortgageRateChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.MortgageRateStepped(it)) },
             suffix = "%"
         )
         StepperInputField(
             label = "Anni mutuo",
-            value = state.anniMutuoInput,
-            onValueChange = { onIntent(HousePriceEvent.AnniMutuoChanged(it)) },
-            onStep = { onIntent(HousePriceEvent.AnniMutuoStepped(it)) },
+            value = state.mortgageYearsInput,
+            onValueChange = { onIntent(HousePriceEvent.MortgageYearsChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.MortgageYearsStepped(it)) },
             suffix = "anni"
         )
         StepperInputField(
             label = "Rendita catastale",
-            value = state.renditaCatastaleInput,
-            onValueChange = { onIntent(HousePriceEvent.RenditaCatastaleChanged(it)) },
-            onStep = { onIntent(HousePriceEvent.RenditaCatastaleStepped(it)) },
+            value = state.cadastralIncomeInput,
+            onValueChange = { onIntent(HousePriceEvent.CadastralIncomeChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.CadastralIncomeStepped(it)) },
             suffix = "EUR"
         )
         StepperInputField(
             label = "Caparra",
-            value = state.caparraInput,
-            onValueChange = { onIntent(HousePriceEvent.CaparraChanged(it)) },
-            onStep = { onIntent(HousePriceEvent.CaparraStepped(it)) },
+            value = state.depositInput,
+            onValueChange = { onIntent(HousePriceEvent.DepositChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.DepositStepped(it)) },
             suffix = "EUR"
         )
     }

@@ -3,67 +3,75 @@ package com.example.housebuddy.domain.usecase
 import com.example.housebuddy.domain.model.HousePriceBreakdown
 import com.example.housebuddy.domain.model.HousePriceInput
 import com.example.housebuddy.domain.model.HousePriceResult
-import com.example.housebuddy.domain.util.calcolaRataMutuo
+import com.example.housebuddy.domain.util.calculateMonthlyMortgagePayment
 import com.example.housebuddy.domain.util.parseInputOrDefault
 
 class CalculateHousePriceUseCase {
     operator fun invoke(input: HousePriceInput): HousePriceResult {
-        val prezzoCasa = parseInputOrDefault(input.prezzoCasaInput, 150000.0).coerceAtLeast(0.0)
-        val richiestaMutuo = parseInputOrDefault(input.richiestaMutuoInput, 80.0).coerceIn(0.0, 100.0)
-        val anticipo = 100.0 - richiestaMutuo
-        val caparra = parseInputOrDefault(input.caparraInput, 5000.0).coerceAtLeast(0.0)
-        val percentualeAgenzia = parseInputOrDefault(input.percentualeAgenziaInput, 4.0).coerceAtLeast(0.0)
-        val fissoAgenzia = parseInputOrDefault(input.fissoAgenziaInput, 7000.0).coerceAtLeast(0.0)
-        val tassoMutuo = parseInputOrDefault(input.tassoMutuoInput, 2.99).coerceAtLeast(0.0)
-        val anniMutuo = parseInputOrDefault(input.anniMutuoInput, 30.0).toInt().coerceIn(5, 40)
-        val renditaCatastale = parseInputOrDefault(input.renditaCatastaleInput, 1071.0).coerceAtLeast(0.0)
+        val housePrice = parseInputOrDefault(input.housePriceInput, 150000.0).coerceAtLeast(0.0)
+        val mortgageRequestPercent = parseInputOrDefault(input.mortgageRequestInput, 80.0).coerceIn(0.0, 100.0)
+        val downPaymentPercent = 100.0 - mortgageRequestPercent
+        /** caparra: reservation deposit */
+        val deposit = parseInputOrDefault(input.depositInput, 5000.0).coerceAtLeast(0.0)
+        val agencyPercentage = parseInputOrDefault(input.agencyPercentageInput, 4.0).coerceAtLeast(0.0)
+        val agencyFixedFee = parseInputOrDefault(input.agencyFixedFeeInput, 7000.0).coerceAtLeast(0.0)
+        val mortgageRate = parseInputOrDefault(input.mortgageRateInput, 2.99).coerceAtLeast(0.0)
+        val mortgageYears = parseInputOrDefault(input.mortgageYearsInput, 30.0).toInt().coerceIn(5, 40)
+        /** rendita catastale: official cadastral income */
+        val cadastralIncome = parseInputOrDefault(input.cadastralIncomeInput, 1071.0).coerceAtLeast(0.0)
 
-        val impostaRegistro = renditaCatastale * 1.05 * 110 * 0.02
-        val impostaIpotecaria = 50.0
-        val impostaCatastale = 50.0
-        val tassaArchivio = 30.4
-        val onorarioScritturazioneDirittiCopia = 1206.73
-        val contributoCNNConsiglioCassaIscrizioneRepertorio = 145.4
-        val visureIpotecarie = 200.0
-        val imposteENotaio = impostaRegistro + impostaIpotecaria + impostaCatastale + tassaArchivio +
-            onorarioScritturazioneDirittiCopia + contributoCNNConsiglioCassaIscrizioneRepertorio + visureIpotecarie
-        val istruttoria = 1000.0
-        val impostaSostitutiva = 300.0
-        val perizia = 300.0
-        val polizzaIncendioObbligatoria = 650.0
-        val polizzaVita = 150.0
-        val soldiMutuo = prezzoCasa * (richiestaMutuo / 100.0)
-        val notaioMutuo = soldiMutuo * 0.00577 + 400.0
-        val speseAvvioMutuo = istruttoria + impostaSostitutiva + perizia + polizzaIncendioObbligatoria + polizzaVita + notaioMutuo
-        val quotaAgenzia = if (input.isPercentuale) prezzoCasa * (percentualeAgenzia / 100.0) else fissoAgenzia
-        val anticipoToltaCaparra = prezzoCasa * (anticipo / 100.0) - caparra
-        val agenziaConIva = quotaAgenzia * 1.22
-        val soldiSubito = agenziaConIva + imposteENotaio + speseAvvioMutuo + prezzoCasa * (anticipo / 100.0)
-        val rataMutuo = calcolaRataMutuo(soldiMutuo, tassoAnnuo = tassoMutuo, durataAnni = anniMutuo)
-        val costoTotaleCasa = soldiSubito + (rataMutuo * 12.0 * anniMutuo)
+        val registrationTax = cadastralIncome * 1.05 * 110 * 0.02
+        val mortgageRegistryTax = 50.0
+        val cadastralTax = 50.0
+        val archiveFee = 30.4
+        val notaryDraftingAndCopyFees = 1206.73
+        val notaryRegulatoryContributions = 145.4
+        val mortgageRegistrySearches = 200.0
+        val purchaseTaxesAndNotaryFees = registrationTax + mortgageRegistryTax + cadastralTax + archiveFee +
+            notaryDraftingAndCopyFees + notaryRegulatoryContributions + mortgageRegistrySearches
+        /** istruttoria: mortgage application fee */
+        val applicationFee = 1000.0
+        /** imposta sostitutiva: flat substitute tax on the mortgage */
+        val substituteTax = 300.0
+        /** perizia: property appraisal */
+        val appraisal = 300.0
+        val mandatoryFireInsurance = 650.0
+        val lifeInsurance = 150.0
+        val mortgageLoanAmount = housePrice * (mortgageRequestPercent / 100.0)
+        /** notaio mutuo: notary fees for the mortgage deed */
+        val mortgageNotaryFee = mortgageLoanAmount * 0.00577 + 400.0
+        val mortgageStartupCosts = applicationFee + substituteTax + appraisal + mandatoryFireInsurance + lifeInsurance + mortgageNotaryFee
+        val agencyCommission = if (input.isAgencyCommissionPercentage) housePrice * (agencyPercentage / 100.0) else agencyFixedFee
+        val downPaymentMinusDeposit = housePrice * (downPaymentPercent / 100.0) - deposit
+        val agencyFeeWithVat = agencyCommission * 1.22
+        /** soldi subito: cash needed at or before closing */
+        val upfrontCashNeeded = agencyFeeWithVat + purchaseTaxesAndNotaryFees + mortgageStartupCosts + housePrice * (downPaymentPercent / 100.0)
+        /** rata mutuo: monthly mortgage installment */
+        val monthlyMortgagePayment = calculateMonthlyMortgagePayment(mortgageLoanAmount, annualRate = mortgageRate, durationYears = mortgageYears)
+        val totalHouseCost = upfrontCashNeeded + (monthlyMortgagePayment * 12.0 * mortgageYears)
 
         return HousePriceResult(
-            soldiSubito = soldiSubito,
-            soldiMutuo = soldiMutuo,
-            rataMutuo = rataMutuo,
-            costoTotaleCasa = costoTotaleCasa,
+            upfrontCashNeeded = upfrontCashNeeded,
+            mortgageLoanAmount = mortgageLoanAmount,
+            monthlyMortgagePayment = monthlyMortgagePayment,
+            totalHouseCost = totalHouseCost,
             breakdown = HousePriceBreakdown(
-                caparra = caparra,
-                anticipoToltaCaparra = anticipoToltaCaparra,
-                agenziaConIva = agenziaConIva,
-                impostaRegistro = impostaRegistro,
-                impostaIpotecaria = impostaIpotecaria,
-                impostaCatastale = impostaCatastale,
-                tassaArchivio = tassaArchivio,
-                onorarioScritturazioneDirittiCopia = onorarioScritturazioneDirittiCopia,
-                contributoCNNConsiglioCassaIscrizioneRepertorio = contributoCNNConsiglioCassaIscrizioneRepertorio,
-                visureIpotecarie = visureIpotecarie,
-                istruttoria = istruttoria,
-                impostaSostitutiva = impostaSostitutiva,
-                perizia = perizia,
-                polizzaIncendioObbligatoria = polizzaIncendioObbligatoria,
-                polizzaVita = polizzaVita,
-                notaioMutuo = notaioMutuo
+                deposit = deposit,
+                downPaymentMinusDeposit = downPaymentMinusDeposit,
+                agencyFeeWithVat = agencyFeeWithVat,
+                registrationTax = registrationTax,
+                mortgageRegistryTax = mortgageRegistryTax,
+                cadastralTax = cadastralTax,
+                archiveFee = archiveFee,
+                notaryDraftingAndCopyFees = notaryDraftingAndCopyFees,
+                notaryRegulatoryContributions = notaryRegulatoryContributions,
+                mortgageRegistrySearches = mortgageRegistrySearches,
+                applicationFee = applicationFee,
+                substituteTax = substituteTax,
+                appraisal = appraisal,
+                mandatoryFireInsurance = mandatoryFireInsurance,
+                lifeInsurance = lifeInsurance,
+                mortgageNotaryFee = mortgageNotaryFee
             )
         )
     }

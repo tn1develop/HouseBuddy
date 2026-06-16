@@ -8,11 +8,11 @@ import com.example.housebuddy.domain.model.HousePriceResult
 import com.example.housebuddy.domain.model.SimulateScenariosResult
 import com.example.housebuddy.domain.usecase.CalculateHousePriceUseCase
 import com.example.housebuddy.domain.usecase.SimulateScenariosUseCase
+import com.example.housebuddy.domain.util.defaultMortgageRate
 import com.example.housebuddy.domain.util.formatNumber
 import com.example.housebuddy.domain.util.formatThousandsWithApostrophe
 import com.example.housebuddy.domain.util.parseInputOrDefault
 import com.example.housebuddy.domain.util.parsePositiveIntOrDefault
-import com.example.housebuddy.domain.util.tassoDefault
 import kotlin.math.round
 
 class HousePriceViewModel(
@@ -31,149 +31,149 @@ class HousePriceViewModel(
 
     fun handleEvent(event: HousePriceEvent) {
         val newState = when (event) {
-            is HousePriceEvent.PrezzoCasaChanged -> {
+            is HousePriceEvent.HousePriceChanged -> {
                 val digitsOnly = event.value.filter { it.isDigit() }
                 val normalized = if (digitsOnly.isEmpty()) "" else formatThousandsWithApostrophe(digitsOnly.toInt())
-                state.copy(prezzoCasaInput = normalized)
+                state.copy(housePriceInput = normalized)
             }
 
-            is HousePriceEvent.PrezzoCasaStepped -> {
-                val current = parseInputOrDefault(state.prezzoCasaInput, 150000.0)
+            is HousePriceEvent.HousePriceStepped -> {
+                val current = parseInputOrDefault(state.housePriceInput, 150000.0)
                 val next = (current + event.direction * 1000.0).coerceAtLeast(0.0)
-                state.copy(prezzoCasaInput = formatThousandsWithApostrophe(next.toInt()))
+                state.copy(housePriceInput = formatThousandsWithApostrophe(next.toInt()))
             }
 
-            is HousePriceEvent.RichiestaMutuoChanged ->
-                state.copy(richiestaMutuoInput = event.value)
+            is HousePriceEvent.MortgageRequestChanged ->
+                state.copy(mortgageRequestInput = event.value)
 
-            is HousePriceEvent.RichiestaMutuoStepped -> {
-                val current = parseInputOrDefault(state.richiestaMutuoInput, 80.0)
+            is HousePriceEvent.MortgageRequestStepped -> {
+                val current = parseInputOrDefault(state.mortgageRequestInput, 80.0)
                 val next = (current + event.direction * 5.0).coerceAtLeast(0.0)
                 state.copy(
-                    richiestaMutuoInput = formatNumber(next, 0),
-                    tassoMutuoInput = tassoDefault(state.mutuoGreen, next)
+                    mortgageRequestInput = formatNumber(next, 0),
+                    mortgageRateInput = defaultMortgageRate(state.greenMortgage, next)
                 )
             }
 
-            is HousePriceEvent.CaparraChanged ->
-                state.copy(caparraInput = event.value)
+            is HousePriceEvent.DepositChanged ->
+                state.copy(depositInput = event.value)
 
-            is HousePriceEvent.CaparraStepped -> {
-                val current = parseInputOrDefault(state.caparraInput, 5000.0)
+            is HousePriceEvent.DepositStepped -> {
+                val current = parseInputOrDefault(state.depositInput, 5000.0)
                 val next = (current + event.direction * 500.0).coerceIn(0.0, 50000.0)
-                state.copy(caparraInput = formatNumber(next, 0))
+                state.copy(depositInput = formatNumber(next, 0))
             }
 
-            is HousePriceEvent.PercentualeAgenziaChanged ->
-                state.copy(percentualeAgenziaInput = event.value)
+            is HousePriceEvent.AgencyPercentageChanged ->
+                state.copy(agencyPercentageInput = event.value)
 
-            is HousePriceEvent.PercentualeAgenziaStepped -> {
-                val current = parseInputOrDefault(state.percentualeAgenziaInput, 5.0)
+            is HousePriceEvent.AgencyPercentageStepped -> {
+                val current = parseInputOrDefault(state.agencyPercentageInput, 5.0)
                 val next = (current + event.direction).coerceAtLeast(0.0)
-                state.copy(percentualeAgenziaInput = formatNumber(next, 0))
+                state.copy(agencyPercentageInput = formatNumber(next, 0))
             }
 
-            is HousePriceEvent.FissoAgenziaChanged ->
-                state.copy(fissoAgenziaInput = event.value)
+            is HousePriceEvent.AgencyFixedFeeChanged ->
+                state.copy(agencyFixedFeeInput = event.value)
 
-            is HousePriceEvent.FissoAgenziaStepped -> {
-                val current = parseInputOrDefault(state.fissoAgenziaInput, 7000.0)
+            is HousePriceEvent.AgencyFixedFeeStepped -> {
+                val current = parseInputOrDefault(state.agencyFixedFeeInput, 7000.0)
                 val next = (current + event.direction * 1000.0).coerceAtLeast(0.0)
-                state.copy(fissoAgenziaInput = formatNumber(next, 0))
+                state.copy(agencyFixedFeeInput = formatNumber(next, 0))
             }
 
-            is HousePriceEvent.MutuoGreenChanged -> {
-                val richiestaMutuo = parseInputOrDefault(state.richiestaMutuoInput, 80.0).coerceIn(1.0, 100.0)
+            is HousePriceEvent.GreenMortgageChanged -> {
+                val mortgageRequestPercent = parseInputOrDefault(state.mortgageRequestInput, 80.0).coerceIn(1.0, 100.0)
                 state.copy(
-                    mutuoGreen = event.checked,
-                    tassoMutuoInput = tassoDefault(event.checked, richiestaMutuo)
+                    greenMortgage = event.checked,
+                    mortgageRateInput = defaultMortgageRate(event.checked, mortgageRequestPercent)
                 )
             }
 
-            is HousePriceEvent.IsPercentualeChanged ->
-                state.copy(isPercentuale = event.checked)
+            is HousePriceEvent.AgencyCommissionTypeChanged ->
+                state.copy(isAgencyCommissionPercentage = event.isPercentage)
 
-            is HousePriceEvent.NumeroCompratoriChanged -> {
+            is HousePriceEvent.NumberOfBuyersChanged -> {
                 val digitsOnly = event.value.filter { it.isDigit() }
                 val normalized = if (digitsOnly.isEmpty()) {
                     ""
                 } else {
                     digitsOnly.toInt().coerceIn(1, 10).toString()
                 }
-                state.copy(numeroCompratoriInput = normalized)
+                state.copy(numberOfBuyersInput = normalized)
             }
 
-            is HousePriceEvent.NumeroCompratoriStepped -> {
-                val current = parsePositiveIntOrDefault(state.numeroCompratoriInput)
+            is HousePriceEvent.NumberOfBuyersStepped -> {
+                val current = parsePositiveIntOrDefault(state.numberOfBuyersInput)
                 val next = (current + event.direction).coerceIn(1, 10)
-                state.copy(numeroCompratoriInput = next.toString())
+                state.copy(numberOfBuyersInput = next.toString())
             }
 
-            is HousePriceEvent.TassoMutuoChanged ->
-                state.copy(tassoMutuoInput = event.value)
+            is HousePriceEvent.MortgageRateChanged ->
+                state.copy(mortgageRateInput = event.value)
 
-            is HousePriceEvent.TassoMutuoStepped -> {
-                val defaultRate = if (state.mutuoGreen) 2.59 else 2.99
-                val current = parseInputOrDefault(state.tassoMutuoInput, defaultRate)
+            is HousePriceEvent.MortgageRateStepped -> {
+                val defaultRate = if (state.greenMortgage) 2.59 else 2.99
+                val current = parseInputOrDefault(state.mortgageRateInput, defaultRate)
                 val next = (current + event.direction * 0.5).coerceAtLeast(0.0)
                 val rounded = round(next * 100.0) / 100.0
-                state.copy(tassoMutuoInput = formatNumber(rounded, 2))
+                state.copy(mortgageRateInput = formatNumber(rounded, 2))
             }
 
-            is HousePriceEvent.AnniMutuoChanged ->
-                state.copy(anniMutuoInput = event.value)
+            is HousePriceEvent.MortgageYearsChanged ->
+                state.copy(mortgageYearsInput = event.value)
 
-            is HousePriceEvent.AnniMutuoStepped -> {
-                val current = parseInputOrDefault(state.anniMutuoInput, 30.0)
+            is HousePriceEvent.MortgageYearsStepped -> {
+                val current = parseInputOrDefault(state.mortgageYearsInput, 30.0)
                 val next = (current + event.direction * 5.0).toInt().coerceIn(5, 40)
-                state.copy(anniMutuoInput = next.toString())
+                state.copy(mortgageYearsInput = next.toString())
             }
 
-            is HousePriceEvent.RenditaCatastaleChanged ->
-                state.copy(renditaCatastaleInput = event.value)
+            is HousePriceEvent.CadastralIncomeChanged ->
+                state.copy(cadastralIncomeInput = event.value)
 
-            is HousePriceEvent.RenditaCatastaleStepped -> {
-                val current = parseInputOrDefault(state.renditaCatastaleInput, 30.0)
+            is HousePriceEvent.CadastralIncomeStepped -> {
+                val current = parseInputOrDefault(state.cadastralIncomeInput, 30.0)
                 val next = (current + event.direction).coerceAtLeast(0.0)
-                state.copy(renditaCatastaleInput = next.toString())
+                state.copy(cadastralIncomeInput = next.toString())
             }
 
             HousePriceEvent.ReloadFromStorage -> stateStorage.load()
 
-            is HousePriceEvent.CanoneAffittoChanged -> {
+            is HousePriceEvent.RentPaymentChanged -> {
                 val digitsOnly = event.value.filter { it.isDigit() }
                 val normalized = if (digitsOnly.isEmpty()) "" else formatThousandsWithApostrophe(digitsOnly.toInt())
-                state.copy(canoneAffittoInput = normalized)
+                state.copy(rentPaymentInput = normalized)
             }
 
-            is HousePriceEvent.CanoneAffittoStepped -> {
-                val current = parseInputOrDefault(state.canoneAffittoInput, 800.0)
+            is HousePriceEvent.RentPaymentStepped -> {
+                val current = parseInputOrDefault(state.rentPaymentInput, 800.0)
                 val next = (current + event.direction * 50.0).coerceIn(0.0, 10_000.0)
-                state.copy(canoneAffittoInput = formatThousandsWithApostrophe(next.toInt()))
+                state.copy(rentPaymentInput = formatThousandsWithApostrophe(next.toInt()))
             }
 
-            is HousePriceEvent.LiquiditaAttualeChanged -> {
+            is HousePriceEvent.CurrentLiquidityChanged -> {
                 val digitsOnly = event.value.filter { it.isDigit() }
                 val normalized = if (digitsOnly.isEmpty()) "" else formatThousandsWithApostrophe(digitsOnly.toInt())
-                state.copy(liquiditaAttualeInput = normalized)
+                state.copy(currentLiquidityInput = normalized)
             }
 
-            is HousePriceEvent.LiquiditaAttualeStepped -> {
-                val current = parseInputOrDefault(state.liquiditaAttualeInput, 20_000.0)
+            is HousePriceEvent.CurrentLiquidityStepped -> {
+                val current = parseInputOrDefault(state.currentLiquidityInput, 20_000.0)
                 val next = (current + event.direction * 1_000.0).coerceIn(0.0, 1_000_000.0)
-                state.copy(liquiditaAttualeInput = formatThousandsWithApostrophe(next.toInt()))
+                state.copy(currentLiquidityInput = formatThousandsWithApostrophe(next.toInt()))
             }
 
-            is HousePriceEvent.RisparmioAnnualeChanged -> {
+            is HousePriceEvent.AnnualSavingsChanged -> {
                 val digitsOnly = event.value.filter { it.isDigit() }
                 val normalized = if (digitsOnly.isEmpty()) "" else formatThousandsWithApostrophe(digitsOnly.toInt())
-                state.copy(risparmioAnnualeInput = normalized)
+                state.copy(annualSavingsInput = normalized)
             }
 
-            is HousePriceEvent.RisparmioAnnualeStepped -> {
-                val current = parseInputOrDefault(state.risparmioAnnualeInput, 10_000.0)
+            is HousePriceEvent.AnnualSavingsStepped -> {
+                val current = parseInputOrDefault(state.annualSavingsInput, 10_000.0)
                 val next = (current + event.direction * 1_000.0).coerceIn(0.0, 500_000.0)
-                state.copy(risparmioAnnualeInput = formatThousandsWithApostrophe(next.toInt()))
+                state.copy(annualSavingsInput = formatThousandsWithApostrophe(next.toInt()))
             }
         }
         state = newState

@@ -1,21 +1,25 @@
 package com.example.housebuddy.presentation.mvi
 
+import com.example.housebuddy.domain.util.defaultMortgageRate
 import com.example.housebuddy.domain.util.formatThousandsWithApostrophe
-import com.example.housebuddy.domain.util.tassoDefault
 
 data class HousePriceViewState(
-    val prezzoCasaInput: String = formatThousandsWithApostrophe(139000),
-    val richiestaMutuoInput: String = "80",
-    val caparraInput: String = "5000",
-    val percentualeAgenziaInput: String = "5",
-    val fissoAgenziaInput: String = "7000",
-    val mutuoGreen: Boolean = false,
-    val isPercentuale: Boolean = false,
-    val numeroCompratoriInput: String = "1",
-    val tassoMutuoInput: String = tassoDefault(false, 80.0),
-    val anniMutuoInput: String = "30",
-    val renditaCatastaleInput: String = "1071",
-    val canoneAffittoInput: String = formatThousandsWithApostrophe(800),
-    val liquiditaAttualeInput: String = formatThousandsWithApostrophe(20_000),
-    val risparmioAnnualeInput: String = formatThousandsWithApostrophe(10_000)
+    val housePriceInput: String = formatThousandsWithApostrophe(139000),
+    val mortgageRequestInput: String = "80",
+    /** caparra: reservation deposit paid to the seller */
+    val depositInput: String = "5000",
+    val agencyPercentageInput: String = "5",
+    val agencyFixedFeeInput: String = "7000",
+    /** mutuo green: Italian green mortgage for energy-efficient homes (class A or B) */
+    val greenMortgage: Boolean = false,
+    val isAgencyCommissionPercentage: Boolean = false,
+    val numberOfBuyersInput: String = "1",
+    val mortgageRateInput: String = defaultMortgageRate(false, 80.0),
+    val mortgageYearsInput: String = "30",
+    /** rendita catastale: official cadastral income assigned to the property */
+    val cadastralIncomeInput: String = "1071",
+    /** canone affitto: monthly rent payment */
+    val rentPaymentInput: String = formatThousandsWithApostrophe(800),
+    val currentLiquidityInput: String = formatThousandsWithApostrophe(20_000),
+    val annualSavingsInput: String = formatThousandsWithApostrophe(10_000)
 )

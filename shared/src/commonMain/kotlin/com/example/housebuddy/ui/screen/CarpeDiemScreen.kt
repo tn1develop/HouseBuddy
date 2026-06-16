@@ -34,24 +34,24 @@ fun CarpeDiemScreen(
     ) {
         StepperInputField(
             label = "Canone affitto (no bollette)",
-            value = state.canoneAffittoInput,
-            onValueChange = { onIntent(HousePriceEvent.CanoneAffittoChanged(it)) },
-            onStep = { onIntent(HousePriceEvent.CanoneAffittoStepped(it)) },
+            value = state.rentPaymentInput,
+            onValueChange = { onIntent(HousePriceEvent.RentPaymentChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.RentPaymentStepped(it)) },
             suffix = "EUR",
             topPadding = 0.dp
         )
         StepperInputField(
             label = "Liquidità attuale",
-            value = state.liquiditaAttualeInput,
-            onValueChange = { onIntent(HousePriceEvent.LiquiditaAttualeChanged(it)) },
-            onStep = { onIntent(HousePriceEvent.LiquiditaAttualeStepped(it)) },
+            value = state.currentLiquidityInput,
+            onValueChange = { onIntent(HousePriceEvent.CurrentLiquidityChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.CurrentLiquidityStepped(it)) },
             suffix = "EUR"
         )
         StepperInputField(
             label = "Risparmio annuale",
-            value = state.risparmioAnnualeInput,
-            onValueChange = { onIntent(HousePriceEvent.RisparmioAnnualeChanged(it)) },
-            onStep = { onIntent(HousePriceEvent.RisparmioAnnualeStepped(it)) },
+            value = state.annualSavingsInput,
+            onValueChange = { onIntent(HousePriceEvent.AnnualSavingsChanged(it)) },
+            onStep = { onIntent(HousePriceEvent.AnnualSavingsStepped(it)) },
             suffix = "EUR"
         )
 

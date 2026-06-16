@@ -1,43 +1,47 @@
 package com.example.housebuddy.presentation.mvi
 
 sealed interface HousePriceEvent {
-    data class PrezzoCasaChanged(val value: String) : HousePriceEvent
-    data class PrezzoCasaStepped(val direction: Int) : HousePriceEvent
+    data class HousePriceChanged(val value: String) : HousePriceEvent
+    data class HousePriceStepped(val direction: Int) : HousePriceEvent
 
-    data class RichiestaMutuoChanged(val value: String) : HousePriceEvent
-    data class RichiestaMutuoStepped(val direction: Int) : HousePriceEvent
+    data class MortgageRequestChanged(val value: String) : HousePriceEvent
+    data class MortgageRequestStepped(val direction: Int) : HousePriceEvent
 
-    data class CaparraChanged(val value: String) : HousePriceEvent
-    data class CaparraStepped(val direction: Int) : HousePriceEvent
+    /** caparra: reservation deposit */
+    data class DepositChanged(val value: String) : HousePriceEvent
+    data class DepositStepped(val direction: Int) : HousePriceEvent
 
-    data class PercentualeAgenziaChanged(val value: String) : HousePriceEvent
-    data class PercentualeAgenziaStepped(val direction: Int) : HousePriceEvent
+    data class AgencyPercentageChanged(val value: String) : HousePriceEvent
+    data class AgencyPercentageStepped(val direction: Int) : HousePriceEvent
 
-    data class FissoAgenziaChanged(val value: String) : HousePriceEvent
-    data class FissoAgenziaStepped(val direction: Int) : HousePriceEvent
+    data class AgencyFixedFeeChanged(val value: String) : HousePriceEvent
+    data class AgencyFixedFeeStepped(val direction: Int) : HousePriceEvent
 
-    data class MutuoGreenChanged(val checked: Boolean) : HousePriceEvent
-    data class IsPercentualeChanged(val checked: Boolean) : HousePriceEvent
-    data class NumeroCompratoriChanged(val value: String) : HousePriceEvent
-    data class NumeroCompratoriStepped(val direction: Int) : HousePriceEvent
+    /** mutuo green: Italian green mortgage */
+    data class GreenMortgageChanged(val checked: Boolean) : HousePriceEvent
+    data class AgencyCommissionTypeChanged(val isPercentage: Boolean) : HousePriceEvent
+    data class NumberOfBuyersChanged(val value: String) : HousePriceEvent
+    data class NumberOfBuyersStepped(val direction: Int) : HousePriceEvent
 
-    data class TassoMutuoChanged(val value: String) : HousePriceEvent
-    data class TassoMutuoStepped(val direction: Int) : HousePriceEvent
+    data class MortgageRateChanged(val value: String) : HousePriceEvent
+    data class MortgageRateStepped(val direction: Int) : HousePriceEvent
 
-    data class AnniMutuoChanged(val value: String) : HousePriceEvent
-    data class AnniMutuoStepped(val direction: Int) : HousePriceEvent
+    data class MortgageYearsChanged(val value: String) : HousePriceEvent
+    data class MortgageYearsStepped(val direction: Int) : HousePriceEvent
 
-    data class RenditaCatastaleChanged(val value: String) : HousePriceEvent
-    data class RenditaCatastaleStepped(val direction: Int) : HousePriceEvent
+    /** rendita catastale: official cadastral income */
+    data class CadastralIncomeChanged(val value: String) : HousePriceEvent
+    data class CadastralIncomeStepped(val direction: Int) : HousePriceEvent
 
     data object ReloadFromStorage : HousePriceEvent
 
-    data class CanoneAffittoChanged(val value: String) : HousePriceEvent
-    data class CanoneAffittoStepped(val direction: Int) : HousePriceEvent
+    /** canone affitto: monthly rent payment */
+    data class RentPaymentChanged(val value: String) : HousePriceEvent
+    data class RentPaymentStepped(val direction: Int) : HousePriceEvent
 
-    data class LiquiditaAttualeChanged(val value: String) : HousePriceEvent
-    data class LiquiditaAttualeStepped(val direction: Int) : HousePriceEvent
+    data class CurrentLiquidityChanged(val value: String) : HousePriceEvent
+    data class CurrentLiquidityStepped(val direction: Int) : HousePriceEvent
 
-    data class RisparmioAnnualeChanged(val value: String) : HousePriceEvent
-    data class RisparmioAnnualeStepped(val direction: Int) : HousePriceEvent
+    data class AnnualSavingsChanged(val value: String) : HousePriceEvent
+    data class AnnualSavingsStepped(val direction: Int) : HousePriceEvent
 }

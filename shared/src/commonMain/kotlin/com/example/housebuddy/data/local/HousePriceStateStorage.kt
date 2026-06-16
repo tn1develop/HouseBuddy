@@ -1,7 +1,5 @@
 package com.example.housebuddy.data.local
 
-import com.example.housebuddy.domain.util.formatNumber
-import com.example.housebuddy.domain.util.parseInputOrDefault
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
 import com.russhwolf.settings.Settings
 
@@ -11,79 +9,79 @@ class HousePriceStateStorage(
     fun load(): HousePriceViewState {
         val defaults = HousePriceViewState()
         return HousePriceViewState(
-            prezzoCasaInput = settings.getString(
-                HousePriceSettingsKeys.PREZZO_CASA_INPUT,
-                defaults.prezzoCasaInput
+            housePriceInput = settings.getString(
+                HousePriceSettingsKeys.HOUSE_PRICE_INPUT,
+                defaults.housePriceInput
             ),
-            richiestaMutuoInput = settings.getString(
-                HousePriceSettingsKeys.RICHIESTA_MUTUO_INPUT,
-                defaults.richiestaMutuoInput
+            mortgageRequestInput = settings.getString(
+                HousePriceSettingsKeys.MORTGAGE_REQUEST_INPUT,
+                defaults.mortgageRequestInput
             ),
-            caparraInput = settings.getString(
-                HousePriceSettingsKeys.CAPARRA_INPUT,
-                defaults.caparraInput
+            depositInput = settings.getString(
+                HousePriceSettingsKeys.DEPOSIT_INPUT,
+                defaults.depositInput
             ),
-            percentualeAgenziaInput = settings.getString(
-                HousePriceSettingsKeys.PERCENTUALE_AGENZIA_INPUT,
-                defaults.percentualeAgenziaInput
+            agencyPercentageInput = settings.getString(
+                HousePriceSettingsKeys.AGENCY_PERCENTAGE_INPUT,
+                defaults.agencyPercentageInput
             ),
-            fissoAgenziaInput = settings.getString(
-                HousePriceSettingsKeys.FISSO_AGENZIA_INPUT,
-                defaults.fissoAgenziaInput
+            agencyFixedFeeInput = settings.getString(
+                HousePriceSettingsKeys.AGENCY_FIXED_FEE_INPUT,
+                defaults.agencyFixedFeeInput
             ),
-            mutuoGreen = settings.getBoolean(
-                HousePriceSettingsKeys.MUTUO_GREEN,
-                defaults.mutuoGreen
+            greenMortgage = settings.getBoolean(
+                HousePriceSettingsKeys.GREEN_MORTGAGE,
+                defaults.greenMortgage
             ),
-            isPercentuale = settings.getBoolean(
-                HousePriceSettingsKeys.IS_PERCENTUALE,
-                defaults.isPercentuale
+            isAgencyCommissionPercentage = settings.getBoolean(
+                HousePriceSettingsKeys.IS_AGENCY_COMMISSION_PERCENTAGE,
+                defaults.isAgencyCommissionPercentage
             ),
-            numeroCompratoriInput = settings.getString(
-                HousePriceSettingsKeys.NUMERO_COMPRATORI_INPUT,
-                defaults.numeroCompratoriInput
+            numberOfBuyersInput = settings.getString(
+                HousePriceSettingsKeys.NUMBER_OF_BUYERS_INPUT,
+                defaults.numberOfBuyersInput
             ),
-            tassoMutuoInput = settings.getString(
-                HousePriceSettingsKeys.TASSO_MUTUO_INPUT,
-                defaults.tassoMutuoInput
+            mortgageRateInput = settings.getString(
+                HousePriceSettingsKeys.MORTGAGE_RATE_INPUT,
+                defaults.mortgageRateInput
             ),
-            anniMutuoInput = settings.getString(
-                HousePriceSettingsKeys.ANNI_MUTUO_INPUT,
-                defaults.anniMutuoInput
+            mortgageYearsInput = settings.getString(
+                HousePriceSettingsKeys.MORTGAGE_YEARS_INPUT,
+                defaults.mortgageYearsInput
             ),
-            renditaCatastaleInput = settings.getString(
-                HousePriceSettingsKeys.RENDITA_CATASTALE_INPUT,
-                defaults.renditaCatastaleInput
+            cadastralIncomeInput = settings.getString(
+                HousePriceSettingsKeys.CADASTRAL_INCOME_INPUT,
+                defaults.cadastralIncomeInput
             ),
-            canoneAffittoInput = settings.getString(
-                HousePriceSettingsKeys.CANONE_AFFITTO_INPUT,
-                defaults.canoneAffittoInput
+            rentPaymentInput = settings.getString(
+                HousePriceSettingsKeys.RENT_PAYMENT_INPUT,
+                defaults.rentPaymentInput
             ),
-            liquiditaAttualeInput = settings.getString(
-                HousePriceSettingsKeys.LIQUIDITA_ATTUALE_INPUT,
-                defaults.liquiditaAttualeInput
+            currentLiquidityInput = settings.getString(
+                HousePriceSettingsKeys.CURRENT_LIQUIDITY_INPUT,
+                defaults.currentLiquidityInput
             ),
-            risparmioAnnualeInput = settings.getString(
-                HousePriceSettingsKeys.RISPARMIO_ANNUALE_INPUT,
-                defaults.risparmioAnnualeInput
+            annualSavingsInput = settings.getString(
+                HousePriceSettingsKeys.ANNUAL_SAVINGS_INPUT,
+                defaults.annualSavingsInput
             )
         )
     }
 
     fun save(state: HousePriceViewState) {
-        settings.putString(HousePriceSettingsKeys.PREZZO_CASA_INPUT, state.prezzoCasaInput)
-        settings.putString(HousePriceSettingsKeys.RICHIESTA_MUTUO_INPUT, state.richiestaMutuoInput)
-        settings.putString(HousePriceSettingsKeys.CAPARRA_INPUT, state.caparraInput)
-        settings.putString(HousePriceSettingsKeys.PERCENTUALE_AGENZIA_INPUT, state.percentualeAgenziaInput)
-        settings.putString(HousePriceSettingsKeys.FISSO_AGENZIA_INPUT, state.fissoAgenziaInput)
-        settings.putBoolean(HousePriceSettingsKeys.MUTUO_GREEN, state.mutuoGreen)
-        settings.putBoolean(HousePriceSettingsKeys.IS_PERCENTUALE, state.isPercentuale)
-        settings.putString(HousePriceSettingsKeys.NUMERO_COMPRATORI_INPUT, state.numeroCompratoriInput)
-        settings.putString(HousePriceSettingsKeys.TASSO_MUTUO_INPUT, state.tassoMutuoInput)
-        settings.putString(HousePriceSettingsKeys.ANNI_MUTUO_INPUT, state.anniMutuoInput)
-        settings.putString(HousePriceSettingsKeys.RENDITA_CATASTALE_INPUT, state.renditaCatastaleInput)
-        settings.putString(HousePriceSettingsKeys.CANONE_AFFITTO_INPUT, state.canoneAffittoInput)
-        settings.putString(HousePriceSettingsKeys.LIQUIDITA_ATTUALE_INPUT, state.liquiditaAttualeInput)
-        settings.putString(HousePriceSettingsKeys.RISPARMIO_ANNUALE_INPUT, state.risparmioAnnualeInput)
+        settings.putString(HousePriceSettingsKeys.HOUSE_PRICE_INPUT, state.housePriceInput)
+        settings.putString(HousePriceSettingsKeys.MORTGAGE_REQUEST_INPUT, state.mortgageRequestInput)
+        settings.putString(HousePriceSettingsKeys.DEPOSIT_INPUT, state.depositInput)
+        settings.putString(HousePriceSettingsKeys.AGENCY_PERCENTAGE_INPUT, state.agencyPercentageInput)
+        settings.putString(HousePriceSettingsKeys.AGENCY_FIXED_FEE_INPUT, state.agencyFixedFeeInput)
+        settings.putBoolean(HousePriceSettingsKeys.GREEN_MORTGAGE, state.greenMortgage)
+        settings.putBoolean(HousePriceSettingsKeys.IS_AGENCY_COMMISSION_PERCENTAGE, state.isAgencyCommissionPercentage)
+        settings.putString(HousePriceSettingsKeys.NUMBER_OF_BUYERS_INPUT, state.numberOfBuyersInput)
+        settings.putString(HousePriceSettingsKeys.MORTGAGE_RATE_INPUT, state.mortgageRateInput)
+        settings.putString(HousePriceSettingsKeys.MORTGAGE_YEARS_INPUT, state.mortgageYearsInput)
+        settings.putString(HousePriceSettingsKeys.CADASTRAL_INCOME_INPUT, state.cadastralIncomeInput)
+        settings.putString(HousePriceSettingsKeys.RENT_PAYMENT_INPUT, state.rentPaymentInput)
+        settings.putString(HousePriceSettingsKeys.CURRENT_LIQUIDITY_INPUT, state.currentLiquidityInput)
+        settings.putString(HousePriceSettingsKeys.ANNUAL_SAVINGS_INPUT, state.annualSavingsInput)
     }
 }
