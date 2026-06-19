@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.util.formatEuroAmount
 import housebuddy.shared.generated.resources.Res
 import housebuddy.shared.generated.resources.ic_info
+import housebuddy.shared.generated.resources.info
+import housebuddy.shared.generated.resources.ok
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ResultField(label: String, value: Double, modifier: Modifier = Modifier) {
@@ -65,7 +68,7 @@ fun InfoIcon(
             text = { Text(infoText) },
             confirmButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text("OK")
+                    Text(stringResource(Res.string.ok))
                 }
             }
         )
@@ -73,7 +76,7 @@ fun InfoIcon(
 
     Icon(
         painter = painterResource(Res.drawable.ic_info),
-        contentDescription = "Info",
+        contentDescription = stringResource(Res.string.info),
         tint = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
             .size(18.dp)

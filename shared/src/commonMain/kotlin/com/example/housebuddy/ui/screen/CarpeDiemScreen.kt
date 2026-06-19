@@ -19,6 +19,14 @@ import com.example.housebuddy.presentation.mvi.HousePriceViewState
 import com.example.housebuddy.ui.components.ScenarioMirroredBarChart
 import com.example.housebuddy.ui.components.StepperInputField
 import com.example.housebuddy.ui.components.toBarChartItems
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.annual_savings_label
+import housebuddy.shared.generated.resources.chart_legend
+import housebuddy.shared.generated.resources.current_liquidity_label
+import housebuddy.shared.generated.resources.rent_payment_label
+import housebuddy.shared.generated.resources.suffix_eur
+import housebuddy.shared.generated.resources.yearly_total_cost_label
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CarpeDiemScreen(
@@ -33,36 +41,36 @@ fun CarpeDiemScreen(
             .verticalScroll(rememberScrollState())
     ) {
         StepperInputField(
-            label = "Canone affitto (no bollette)",
+            label = stringResource(Res.string.rent_payment_label),
             value = state.rentPaymentInput,
             onValueChange = { onIntent(HousePriceEvent.RentPaymentChanged(it)) },
             onStep = { onIntent(HousePriceEvent.RentPaymentStepped(it)) },
-            suffix = "EUR",
+            suffix = stringResource(Res.string.suffix_eur),
             topPadding = 0.dp
         )
         StepperInputField(
-            label = "Liquidità attuale",
+            label = stringResource(Res.string.current_liquidity_label),
             value = state.currentLiquidityInput,
             onValueChange = { onIntent(HousePriceEvent.CurrentLiquidityChanged(it)) },
             onStep = { onIntent(HousePriceEvent.CurrentLiquidityStepped(it)) },
-            suffix = "EUR"
+            suffix = stringResource(Res.string.suffix_eur)
         )
         StepperInputField(
-            label = "Risparmio annuale",
+            label = stringResource(Res.string.annual_savings_label),
             value = state.annualSavingsInput,
             onValueChange = { onIntent(HousePriceEvent.AnnualSavingsChanged(it)) },
             onStep = { onIntent(HousePriceEvent.AnnualSavingsStepped(it)) },
-            suffix = "EUR"
+            suffix = stringResource(Res.string.suffix_eur)
         )
 
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
         Text(
-            text = "Costo totale per anno",
+            text = stringResource(Res.string.yearly_total_cost_label),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         )
         Text(
-            text = "Altezza barra = costo totale casa + affitto.",
+            text = stringResource(Res.string.chart_legend),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)

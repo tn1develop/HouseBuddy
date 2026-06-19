@@ -18,6 +18,21 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import com.example.housebuddy.resources.buildTransferDetails
+import com.example.housebuddy.resources.transferBleServiceError
+import com.example.housebuddy.resources.transferConnecting
+import com.example.housebuddy.resources.transferDeviceNotFound
+import com.example.housebuddy.resources.transferDeviceUnnamed
+import com.example.housebuddy.resources.transferListeningForSender
+import com.example.housebuddy.resources.transferNoDevicesFound
+import com.example.housebuddy.resources.transferReady
+import com.example.housebuddy.resources.transferReceiveFailed
+import com.example.housebuddy.resources.transferReceiveSuccess
+import com.example.housebuddy.resources.transferScanningDevices
+import com.example.housebuddy.resources.transferSelectReceivingPhone
+import com.example.housebuddy.resources.transferSendFailed
+import com.example.housebuddy.resources.transferSendSuccess
+import com.example.housebuddy.resources.transferUnknownError
 import platform.CoreBluetooth.CBATTErrorSuccess
 import platform.CoreBluetooth.CBATTRequest
 import platform.CoreBluetooth.CBAdvertisementDataServiceUUIDsKey
@@ -67,11 +82,18 @@ private class IosBluetoothTransferController(
 ) : BluetoothTransferController {
 
     private val mutableUiState = MutableStateFlow(
-        BluetoothTransferUiState(supported = true, inProgress = false, statusMessage = "Pronto")
+        BluetoothTransferUiState(supported = true, inProgress = false)
     )
     override val uiState: StateFlow<BluetoothTransferUiState> = mutableUiState
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    init {
+        scope.launch {
+            mutableUiState.update { it.copy(statusMessage = transferReady()) }
+        }
+    }
+
     private var runningJob: Job? = null
 
     private val serviceUuid = CBUUID.UUIDWithString(BLE_SERVICE_UUID)
@@ -103,12 +125,16 @@ private class IosBluetoothTransferController(
     override fun selectPeer(address: String) {
         if (mode != TransferMode.Send) return
         val peripheral = discovered[address] ?: run {
-            mutableUiState.update { it.copy(statusMessage = "Dispositivo non trovato. Aggiorna la lista e riprova.") }
+            scope.launch {
+                mutableUiState.update { it.copy(statusMessage = transferDeviceNotFound()) }
+            }
             return
         }
         selectedPeripheralId = address
-        mutableUiState.update {
-            it.copy(inProgress = true, completed = false, statusMessage = "Connessione al dispositivo in corso...")
+        scope.launch {
+            mutableUiState.update {
+                it.copy(inProgress = true, completed = false, statusMessage = transferConnecting())
+            }
         }
         centralManager?.connectPeripheral(peripheral, options = null)
     }
@@ -137,27 +163,31 @@ private class IosBluetoothTransferController(
     }
 
     private fun startListening() {
-        mutableUiState.update {
-            it.copy(
-                peers = emptyList(),
-                inProgress = true,
-                completed = false,
-                details = emptyList(),
-                statusMessage = "In ascolto di un dispositivo in invio..."
-            )
+        scope.launch {
+            mutableUiState.update {
+                it.copy(
+                    peers = emptyList(),
+                    inProgress = true,
+                    completed = false,
+                    details = emptyList(),
+                    statusMessage = transferListeningForSender()
+                )
+            }
         }
         peripheralManager = CBPeripheralManager(peripheralDelegate, dispatch_get_main_queue())
     }
 
     private fun startBrowsing() {
-        mutableUiState.update {
-            it.copy(
-                peers = emptyList(),
-                inProgress = true,
-                completed = false,
-                details = emptyList(),
-                statusMessage = "Ricerca dispositivi BLE in corso..."
-            )
+        scope.launch {
+            mutableUiState.update {
+                it.copy(
+                    peers = emptyList(),
+                    inProgress = true,
+                    completed = false,
+                    details = emptyList(),
+                    statusMessage = transferScanningDevices()
+                )
+            }
         }
         centralManager = CBCentralManager(centralDelegate, dispatch_get_main_queue())
     }
@@ -176,8 +206,13 @@ private class IosBluetoothTransferController(
 
     internal fun onPeripheralServiceAdded(manager: CBPeripheralManager, error: NSError?) {
         if (error != null) {
-            mutableUiState.update {
-                it.copy(inProgress = false, statusMessage = "Errore servizio BLE: ${error.localizedDescription}")
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(
+                        inProgress = false,
+                        statusMessage = transferBleServiceError(error.localizedDescription)
+                    )
+                }
             }
             return
         }
@@ -202,7 +237,7 @@ private class IosBluetoothTransferController(
                             it.copy(
                                 inProgress = false,
                                 completed = true,
-                                statusMessage = "Settings ricevuti e salvati con successo.",
+                                statusMessage = transferReceiveSuccess(),
                                 details = buildTransferDetails(keys)
                             )
                         }
@@ -212,7 +247,9 @@ private class IosBluetoothTransferController(
                             it.copy(
                                 inProgress = false,
                                 completed = false,
-                                statusMessage = "Ricezione fallita: ${error.message ?: "errore sconosciuto"}",
+                                statusMessage = transferReceiveFailed(
+                                    error.message ?: transferUnknownError()
+                                ),
                                 details = emptyList()
                             )
                         }
@@ -251,24 +288,28 @@ private class IosBluetoothTransferController(
 
     internal fun onChunkWritten(peripheral: CBPeripheral, error: NSError?) {
         if (error != null) {
-            mutableUiState.update {
-                it.copy(
-                    inProgress = false,
-                    completed = false,
-                    statusMessage = "Invio fallito: ${error.localizedDescription}"
-                )
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(
+                        inProgress = false,
+                        completed = false,
+                        statusMessage = transferSendFailed(error.localizedDescription)
+                    )
+                }
             }
             return
         }
         outboundIndex += 1
         if (outboundIndex >= outboundChunks.size) {
-            mutableUiState.update {
-                it.copy(
-                    inProgress = false,
-                    completed = true,
-                    statusMessage = "Settings inviati con successo.",
-                    details = buildTransferDetails(outboundKeys)
-                )
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(
+                        inProgress = false,
+                        completed = true,
+                        statusMessage = transferSendSuccess(),
+                        details = buildTransferDetails(outboundKeys)
+                    )
+                }
             }
             return
         }
@@ -286,24 +327,28 @@ private class IosBluetoothTransferController(
     }
 
     private fun publishPeers() {
-        val peers = discovered.entries
-            .map { (identifier, peripheral) ->
-                BluetoothPeer(
-                    name = peripheral.name ?: "Dispositivo senza nome",
-                    address = identifier
+        scope.launch {
+            val unnamedDevice = transferDeviceUnnamed()
+            val peers = discovered.entries
+                .map { (identifier, peripheral) ->
+                    BluetoothPeer(
+                        name = peripheral.name ?: unnamedDevice,
+                        address = identifier
+                    )
+                }
+                .sortedBy { it.name.lowercase() }
+            val statusMessage = if (peers.isEmpty()) {
+                transferNoDevicesFound()
+            } else {
+                transferSelectReceivingPhone()
+            }
+            mutableUiState.update {
+                it.copy(
+                    peers = peers,
+                    inProgress = false,
+                    statusMessage = statusMessage
                 )
             }
-            .sortedBy { it.name.lowercase() }
-        mutableUiState.update {
-            it.copy(
-                peers = peers,
-                inProgress = false,
-                statusMessage = if (peers.isEmpty()) {
-                    "Nessun dispositivo trovato. Verifica Bluetooth e riprova."
-                } else {
-                    "Seleziona il telefono in modalità ricezione."
-                }
-            )
         }
     }
 }
@@ -504,12 +549,3 @@ private fun importSettingsPayload(payload: String): List<String> {
     return importedKeys.sorted()
 }
 
-private fun buildTransferDetails(keys: List<String>): List<String> {
-    if (keys.isEmpty()) return listOf("Nessun setting trasferito.")
-    val preview = keys.take(5).joinToString(", ")
-    val extra = if (keys.size > 5) " (+${keys.size - 5} altri)" else ""
-    return listOf(
-        "Settings trasferiti: ${keys.size}",
-        "Chiavi: $preview$extra"
-    )
-}

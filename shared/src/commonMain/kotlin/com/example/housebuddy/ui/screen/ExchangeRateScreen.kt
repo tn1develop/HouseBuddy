@@ -21,6 +21,18 @@ import com.example.housebuddy.domain.util.formatNumber
 import com.example.housebuddy.presentation.mvi.ExchangeRateEvent
 import com.example.housebuddy.presentation.mvi.ExchangeRateViewState
 import com.example.housebuddy.ui.components.MonthlyLineChart
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.ecb_loading
+import housebuddy.shared.generated.resources.euribor_chart_description
+import housebuddy.shared.generated.resources.euribor_disclaimer
+import housebuddy.shared.generated.resources.euribor_history_title
+import housebuddy.shared.generated.resources.euribor_mortgage_explanation
+import housebuddy.shared.generated.resources.exchange_rate_load_error
+import housebuddy.shared.generated.resources.latest_month
+import housebuddy.shared.generated.resources.no_data_available
+import housebuddy.shared.generated.resources.period_range
+import housebuddy.shared.generated.resources.retry
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ExchangeRateScreen(
@@ -40,24 +52,22 @@ fun ExchangeRateScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Andamento storico Euribor 3 mesi",
+            text = stringResource(Res.string.euribor_history_title),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Euribor 3 mesi (area euro), fonte BCE. Scorri il grafico per la cronologia completa.",
+            text = stringResource(Res.string.euribor_chart_description),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "Il tasso dell'Euribor è quello su cui si basano i tassi di mutuo in Europa." +
-                    "Al variare di esso, variano anche le rate dei mutui.",
+            text = stringResource(Res.string.euribor_mortgage_explanation),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
-            text = "N.B. L'euribor non è il tasso di mutuo che ti farà la banca, è il tasso di riferimento su cui si basano i mutui. " +
-                    "Il tasso finale dipende da molti fattori, tra cui la tua situazione finanziaria e le politiche della banca.",
+            text = stringResource(Res.string.euribor_disclaimer),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -72,37 +82,46 @@ fun ExchangeRateScreen(
                 ) {
                     CircularProgressIndicator()
                     Text(
-                        text = "Caricamento dati ECB…",
+                        text = stringResource(Res.string.ecb_loading),
                         modifier = Modifier.padding(top = 12.dp),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
 
-            state.errorMessage != null -> {
+            state.loadFailed -> {
                 Text(
-                    text = state.errorMessage.orEmpty(),
+                    text = stringResource(Res.string.exchange_rate_load_error),
                     color = MaterialTheme.colorScheme.error
                 )
                 TextButton(onClick = { onIntent(ExchangeRateEvent.RetryClicked) }) {
-                    Text("Riprova")
+                    Text(stringResource(Res.string.retry))
                 }
             }
 
             state.monthlyRates.isEmpty() -> {
-                Text(text = "Nessun dato disponibile.")
+                Text(text = stringResource(Res.string.no_data_available))
             }
 
             else -> {
                 val latest = state.monthlyRates.last()
                 val earliest = state.monthlyRates.first()
                 Text(
-                    text = "Ultimo mese (${latest.yearMonth}): ${formatNumber(latest.averageRate, 2)}%",
+                    text = stringResource(
+                        Res.string.latest_month,
+                        latest.yearMonth,
+                        formatNumber(latest.averageRate, 2)
+                    ),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "Periodo: ${earliest.yearMonth} → ${latest.yearMonth} (${state.monthlyRates.size} mesi)",
+                    text = stringResource(
+                        Res.string.period_range,
+                        earliest.yearMonth,
+                        latest.yearMonth,
+                        state.monthlyRates.size
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

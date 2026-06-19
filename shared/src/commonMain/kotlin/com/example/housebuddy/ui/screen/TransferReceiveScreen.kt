@@ -4,6 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.housebuddy.presentation.mvi.HousePriceEvent
 import com.example.housebuddy.transfer.TransferMode
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.transfer_receive_subtitle
+import housebuddy.shared.generated.resources.transfer_receive_title
+import housebuddy.shared.generated.resources.transfer_waiting_screen_send
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ReceiveTransferScreen(
@@ -12,9 +17,9 @@ fun ReceiveTransferScreen(
     modifier: Modifier = Modifier,
 ) {
     BluetoothConnectionScreen(
-        title = "Ricevi trasferimento",
-        subtitle = "Questo telefono cerca via Bluetooth un dispositivo in modalità invio.",
-        waitingForScreen = "Invia Trasferimento",
+        title = stringResource(Res.string.transfer_receive_title),
+        subtitle = stringResource(Res.string.transfer_receive_subtitle),
+        waitingForScreen = stringResource(Res.string.transfer_waiting_screen_send),
         mode = TransferMode.Receive,
         onChangeDirection = onChangeDirection,
         onTransferCompleted = { onIntent(HousePriceEvent.ReloadFromStorage) },

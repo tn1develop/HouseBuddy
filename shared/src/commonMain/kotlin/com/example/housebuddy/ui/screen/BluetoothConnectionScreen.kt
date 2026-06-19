@@ -21,6 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.housebuddy.transfer.TransferMode
 import com.example.housebuddy.transfer.rememberBluetoothTransferController
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.transfer_change_direction
+import housebuddy.shared.generated.resources.transfer_operation_in_progress
+import housebuddy.shared.generated.resources.transfer_paired_devices
+import housebuddy.shared.generated.resources.transfer_receive_in_progress
+import housebuddy.shared.generated.resources.transfer_refresh_bluetooth_devices
+import housebuddy.shared.generated.resources.transfer_restart_bluetooth_listen
+import housebuddy.shared.generated.resources.transfer_retry_connection
+import housebuddy.shared.generated.resources.transfer_send_in_progress
+import housebuddy.shared.generated.resources.transfer_waiting_instruction
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BluetoothConnectionScreen(
@@ -47,10 +58,20 @@ fun BluetoothConnectionScreen(
         }
     }
 
-    val waitingText = "Tieni aperta anche la schermata \"$waitingForScreen\" sull'altro telefono."
+    val waitingText = stringResource(Res.string.transfer_waiting_instruction, waitingForScreen)
     val inProgressText = when (mode) {
-        TransferMode.Receive -> "In ascolto per ricevere i settings via Bluetooth."
-        TransferMode.Send -> "Seleziona un dispositivo e avvia l'invio dei settings."
+        TransferMode.Receive -> stringResource(Res.string.transfer_receive_in_progress)
+        TransferMode.Send -> stringResource(Res.string.transfer_send_in_progress)
+    }
+    val retryLabel = if (uiState.inProgress) {
+        stringResource(Res.string.transfer_operation_in_progress)
+    } else {
+        stringResource(Res.string.transfer_retry_connection)
+    }
+    val refreshLabel = if (mode == TransferMode.Receive) {
+        stringResource(Res.string.transfer_restart_bluetooth_listen)
+    } else {
+        stringResource(Res.string.transfer_refresh_bluetooth_devices)
     }
 
     Column(
@@ -90,7 +111,7 @@ fun BluetoothConnectionScreen(
         if (mode == TransferMode.Send && uiState.peers.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Dispositivi associati",
+                text = stringResource(Res.string.transfer_paired_devices),
                 style = MaterialTheme.typography.titleSmall
             )
             uiState.peers.forEach { peer ->
@@ -111,14 +132,14 @@ fun BluetoothConnectionScreen(
             modifier = Modifier.fillMaxWidth(),
             enabled = !uiState.inProgress
         ) {
-            Text(if (uiState.inProgress) "Operazione in corso..." else "Riprova connessione")
+            Text(retryLabel)
         }
 
         OutlinedButton(
             onClick = { controller.start() },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(if (mode == TransferMode.Receive) "Riavvia ascolto Bluetooth" else "Aggiorna dispositivi Bluetooth")
+            Text(refreshLabel)
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -127,7 +148,7 @@ fun BluetoothConnectionScreen(
             onClick = onChangeDirection,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Cambia direzione")
+            Text(stringResource(Res.string.transfer_change_direction))
         }
     }
 }

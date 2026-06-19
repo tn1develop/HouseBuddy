@@ -16,7 +16,7 @@ data class BluetoothPeer(
 data class BluetoothTransferUiState(
     val supported: Boolean = true,
     val inProgress: Boolean = false,
-    val statusMessage: String = "Pronto",
+    val statusMessage: String = "",
     val peers: List<BluetoothPeer> = emptyList(),
     val completed: Boolean = false,
     val details: List<String> = emptyList()

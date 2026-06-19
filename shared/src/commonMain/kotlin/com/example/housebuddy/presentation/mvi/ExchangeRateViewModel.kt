@@ -25,19 +25,19 @@ class ExchangeRateViewModel(
 
     private fun loadRates() {
         scope.launch {
-            state = state.copy(isLoading = true, errorMessage = null)
+            state = state.copy(isLoading = true, loadFailed = false)
             runCatching { fetchEuriborMonthlyRates() }
                 .onSuccess { rates ->
                     state = state.copy(
                         isLoading = false,
                         monthlyRates = rates,
-                        errorMessage = null
+                        loadFailed = false
                     )
                 }
-                .onFailure { error ->
+                .onFailure {
                     state = state.copy(
                         isLoading = false,
-                        errorMessage = error.message ?: "Errore nel caricamento dei dati"
+                        loadFailed = true
                     )
                 }
         }

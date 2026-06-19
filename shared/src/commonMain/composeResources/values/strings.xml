@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HouseBuddy</string>
+
+    <!-- Navigation -->
+    <string name="nav_calcolo">Calcolo</string>
+    <string name="nav_storico">Storico</string>
+    <string name="nav_menu">Menu</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="back">Indietro</string>
+    <string name="settings">Impostazioni</string>
+    <string name="info">Info</string>
+    <string name="retry">Riprova</string>
+    <string name="suffix_eur">EUR</string>
+    <string name="suffix_percent">%</string>
+    <string name="suffix_years">anni</string>
+
+    <!-- House price calculator -->
+    <string name="house_price_label">Prezzo casa</string>
+    <string name="mortgage_request_label">Richiesta di mutuo</string>
+    <string name="agency_percentage_label">Percentuale agenzia</string>
+    <string name="agency_fixed_label">Fisso agenzia</string>
+    <string name="upfront_liquidity_label">Liquidità necessaria all'atto o prima</string>
+    <string name="mortgage_payment_estimate_label">Ipotesi rata mutuo</string>
+    <string name="expense_label_total">Totale</string>
+    <string name="expense_label_per_capita">Pro capite (%1$d pers.)</string>
+    <string name="mortgage_request_supporting">%1$s · %2$s%% del prezzo casa</string>
+
+    <!-- Liquidity info dialog -->
+    <string name="liquidity_info_main_header">spese principali:</string>
+    <string name="liquidity_info_main_deposit">- Caparra %1$s</string>
+    <string name="liquidity_info_main_down_payment">- Anticipo tolta la caparra %1$s</string>
+    <string name="liquidity_info_main_agency">- Agenzia con Iva %1$s</string>
+    <string name="liquidity_info_section_total">TOT: %1$s</string>
+    <string name="liquidity_info_mortgage_header">mutuo:</string>
+    <string name="liquidity_info_mortgage_application">- istruttoria %1$s</string>
+    <string name="liquidity_info_mortgage_substitute_tax">- imposta sostitutiva %1$s</string>
+    <string name="liquidity_info_mortgage_appraisal">- perizia %1$s</string>
+    <string name="liquidity_info_mortgage_fire_insurance">- assicurazione incendio %1$s</string>
+    <string name="liquidity_info_mortgage_life_insurance">- assicurazione vita %1$s</string>
+    <string name="liquidity_info_mortgage_notary">- notaio mutuo %1$s</string>
+    <string name="liquidity_info_notary_header">notaio acquisto:</string>
+    <string name="liquidity_info_notary_registration">- Imposta di registro %1$s</string>
+    <string name="liquidity_info_notary_mortgage_registry">- Imposta ipotecaria %1$s</string>
+    <string name="liquidity_info_notary_cadastral">- Imposta catastale %1$s</string>
+    <string name="liquidity_info_notary_archive">- Tassa archivio %1$s</string>
+    <string name="liquidity_info_notary_drafting">- Onorario, scritturazione, diritti di copia %1$s</string>
+    <string name="liquidity_info_notary_regulatory">- Contributo CNN, Consiglio, Cassa, Iscrizione a repertorio %1$s</string>
+    <string name="liquidity_info_notary_searches">- Visure ipotecarie %1$s</string>
+
+    <!-- Settings -->
+    <string name="green_mortgage_label">Mutuo Green (classe A o B)</string>
+    <string name="agency_commission_label">Provvigione Agenzia</string>
+    <string name="agency_commission_percentage">Percentuale</string>
+    <string name="agency_commission_fixed">Importo Fisso</string>
+    <string name="number_of_buyers_label">N. Acquirenti</string>
+    <string name="mortgage_rate_label">Tasso mutuo</string>
+    <string name="mortgage_years_label">Anni mutuo</string>
+    <string name="cadastral_income_label">Rendita catastale</string>
+    <string name="deposit_label">Caparra</string>
+
+    <!-- Carpe diem -->
+    <string name="rent_payment_label">Canone affitto (no bollette)</string>
+    <string name="current_liquidity_label">Liquidità attuale</string>
+    <string name="annual_savings_label">Risparmio annuale</string>
+    <string name="yearly_total_cost_label">Costo totale per anno</string>
+    <string name="chart_legend">Altezza barra = costo totale casa + affitto.</string>
+
+    <!-- Exchange rate -->
+    <string name="euribor_history_title">Andamento storico Euribor 3 mesi</string>
+    <string name="euribor_chart_description">Euribor 3 mesi (area euro), fonte BCE. Scorri il grafico per la cronologia completa.</string>
+    <string name="euribor_mortgage_explanation">Il tasso dell'Euribor è quello su cui si basano i tassi di mutuo in Europa.Al variare di esso, variano anche le rate dei mutui.</string>
+    <string name="euribor_disclaimer">N.B. L'euribor non è il tasso di mutuo che ti farà la banca, è il tasso di riferimento su cui si basano i mutui. Il tasso finale dipende da molti fattori, tra cui la tua situazione finanziaria e le politiche della banca.</string>
+    <string name="ecb_loading">Caricamento dati ECB…</string>
+    <string name="no_data_available">Nessun dato disponibile.</string>
+    <string name="latest_month">Ultimo mese (%1$s): %2$s%%</string>
+    <string name="period_range">Periodo: %1$s → %2$s (%3$d mesi)</string>
+    <string name="euribor_chart_y_axis">Euribor 3M (%)</string>
+    <string name="euribor_chart_x_axis">Mese / Anno</string>
+    <string name="exchange_rate_load_error">Errore nel caricamento dei dati</string>
+
+    <!-- Menu & transfer navigation -->
+    <string name="menu_select_option">Seleziona un'opzione.</string>
+    <string name="transfer">Trasferimento</string>
+    <string name="carpe_diem">Carpe diem</string>
+    <string name="transfer_select_direction">Seleziona la direzione di trasferimento.</string>
+    <string name="transfer_receive_on_phone">Ricevi su questo telefono</string>
+    <string name="transfer_send_from_phone">Invia da questo telefono</string>
+    <string name="transfer_send_title">Invia trasferimento</string>
+    <string name="transfer_receive_title">Ricevi trasferimento</string>
+    <string name="transfer_send_subtitle">Questo telefono cerca via Bluetooth un dispositivo in modalità ricezione.</string>
+    <string name="transfer_receive_subtitle">Questo telefono cerca via Bluetooth un dispositivo in modalità invio.</string>
+    <string name="transfer_waiting_screen_send">Invia Trasferimento</string>
+    <string name="transfer_waiting_screen_receive">Ricevi Trasferimento</string>
+    <string name="transfer_waiting_instruction">Tieni aperta anche la schermata "%1$s" sull'altro telefono.</string>
+    <string name="transfer_receive_in_progress">In ascolto per ricevere i settings via Bluetooth.</string>
+    <string name="transfer_send_in_progress">Seleziona un dispositivo e avvia l'invio dei settings.</string>
+    <string name="transfer_paired_devices">Dispositivi associati</string>
+    <string name="transfer_operation_in_progress">Operazione in corso...</string>
+    <string name="transfer_retry_connection">Riprova connessione</string>
+    <string name="transfer_restart_bluetooth_listen">Riavvia ascolto Bluetooth</string>
+    <string name="transfer_refresh_bluetooth_devices">Aggiorna dispositivi Bluetooth</string>
+    <string name="transfer_change_direction">Cambia direzione</string>
+
+    <!-- Bluetooth transfer status -->
+    <string name="transfer_ready">Pronto</string>
+    <string name="transfer_bluetooth_not_supported">Bluetooth non supportato su questo dispositivo.</string>
+    <string name="transfer_bluetooth_unavailable">Bluetooth non disponibile.</string>
+    <string name="transfer_bluetooth_permission_missing">Permesso Bluetooth mancante. Consenti 'Dispositivi nelle vicinanze' nelle impostazioni app.</string>
+    <string name="transfer_bluetooth_disabled">Bluetooth disattivato. Attivalo e riprova.</string>
+    <string name="transfer_bluetooth_connect_permission_missing">Permesso Bluetooth mancante. Impossibile connettere.</string>
+    <string name="transfer_device_not_found">Dispositivo non trovato. Aggiorna la lista e riprova.</string>
+    <string name="transfer_connecting">Connessione al dispositivo in corso...</string>
+    <string name="transfer_ble_scan_error">Errore scansione BLE (codice %1$d).</string>
+    <string name="transfer_ble_listen_error">Errore ascolto BLE (codice %1$d).</string>
+    <string name="transfer_ble_service_register_error">Impossibile registrare servizio BLE (status %1$d).</string>
+    <string name="transfer_ble_connection_failed">Connessione BLE fallita (status %1$d).</string>
+    <string name="transfer_ble_disconnected_during_send">Dispositivo disconnesso durante l'invio.</string>
+    <string name="transfer_ble_service_discovery_failed">Discovery servizi BLE fallita.</string>
+    <string name="transfer_ble_service_not_found">Servizio HouseBuddy BLE non trovato.</string>
+    <string name="transfer_ble_send_failed">Invio BLE fallito (status %1$d).</string>
+    <string name="transfer_send_success">Settings inviati con successo.</string>
+    <string name="transfer_advertise_permission_missing">Permesso advertising Bluetooth mancante.</string>
+    <string name="transfer_listening_for_sender">In ascolto di un dispositivo in invio...</string>
+    <string name="transfer_bluetooth_manager_unavailable">Bluetooth manager non disponibile.</string>
+    <string name="transfer_ble_service_create_failed">Impossibile creare servizio BLE.</string>
+    <string name="transfer_scan_permission_missing">Permesso scansione Bluetooth mancante.</string>
+    <string name="transfer_scanning_devices">Ricerca dispositivi BLE in corso...</string>
+    <string name="transfer_ble_scan_failed">Errore scansione BLE: %1$s</string>
+    <string name="transfer_ble_characteristic_unavailable">Caratteristica BLE non disponibile.</string>
+    <string name="transfer_ble_chunk_send_failed">Impossibile inviare chunk BLE.</string>
+    <string name="transfer_receive_success">Settings ricevuti e salvati con successo.</string>
+    <string name="transfer_receive_failed">Ricezione fallita: %1$s</string>
+    <string name="transfer_unknown_error">errore sconosciuto</string>
+    <string name="transfer_device_unnamed">Dispositivo senza nome</string>
+    <string name="transfer_no_devices_found">Nessun dispositivo trovato. Verifica Bluetooth e riprova.</string>
+    <string name="transfer_select_receiving_phone">Seleziona il telefono in modalità ricezione.</string>
+    <string name="transfer_ble_service_error">Errore servizio BLE: %1$s</string>
+    <string name="transfer_send_failed">Invio fallito: %1$s</string>
+    <string name="transfer_no_settings">Nessun setting trasferito.</string>
+    <string name="transfer_settings_count">Settings trasferiti: %1$d</string>
+    <string name="transfer_keys_preview">Chiavi: %1$s%2$s</string>
+    <string name="transfer_extra_others"> (+%1$d altri)</string>
+</resources>

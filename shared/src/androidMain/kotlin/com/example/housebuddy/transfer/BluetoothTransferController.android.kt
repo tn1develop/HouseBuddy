@@ -30,6 +30,39 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.example.housebuddy.data.local.getHousePriceSharedPreferences
+import com.example.housebuddy.resources.buildTransferDetails
+import com.example.housebuddy.resources.transferAdvertisePermissionMissing
+import com.example.housebuddy.resources.transferBleCharacteristicUnavailable
+import com.example.housebuddy.resources.transferBleChunkSendFailed
+import com.example.housebuddy.resources.transferBleConnectionFailed
+import com.example.housebuddy.resources.transferBleDisconnectedDuringSend
+import com.example.housebuddy.resources.transferBleListenError
+import com.example.housebuddy.resources.transferBleScanError
+import com.example.housebuddy.resources.transferBleScanFailed
+import com.example.housebuddy.resources.transferBleSendFailed
+import com.example.housebuddy.resources.transferBleServiceCreateFailed
+import com.example.housebuddy.resources.transferBleServiceDiscoveryFailed
+import com.example.housebuddy.resources.transferBleServiceNotFound
+import com.example.housebuddy.resources.transferBleServiceRegisterError
+import com.example.housebuddy.resources.transferBluetoothConnectPermissionMissing
+import com.example.housebuddy.resources.transferBluetoothDisabled
+import com.example.housebuddy.resources.transferBluetoothManagerUnavailable
+import com.example.housebuddy.resources.transferBluetoothNotSupported
+import com.example.housebuddy.resources.transferBluetoothPermissionMissing
+import com.example.housebuddy.resources.transferBluetoothUnavailable
+import com.example.housebuddy.resources.transferConnecting
+import com.example.housebuddy.resources.transferDeviceNotFound
+import com.example.housebuddy.resources.transferDeviceUnnamed
+import com.example.housebuddy.resources.transferListeningForSender
+import com.example.housebuddy.resources.transferNoDevicesFound
+import com.example.housebuddy.resources.transferReady
+import com.example.housebuddy.resources.transferReceiveFailed
+import com.example.housebuddy.resources.transferReceiveSuccess
+import com.example.housebuddy.resources.transferScanPermissionMissing
+import com.example.housebuddy.resources.transferScanningDevices
+import com.example.housebuddy.resources.transferSelectReceivingPhone
+import com.example.housebuddy.resources.transferSendSuccess
+import com.example.housebuddy.resources.transferUnknownError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -70,15 +103,19 @@ private class AndroidBluetoothTransferController(
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val mutableUiState = MutableStateFlow(
-        BluetoothTransferUiState(
-            supported = adapter != null,
-            statusMessage = if (adapter == null) {
-                "Bluetooth non supportato su questo dispositivo."
-            } else {
-                "Pronto"
-            }
-        )
+        BluetoothTransferUiState(supported = adapter != null)
     )
+
+    init {
+        scope.launch {
+            val message = if (adapter == null) {
+                transferBluetoothNotSupported()
+            } else {
+                transferReady()
+            }
+            mutableUiState.update { it.copy(statusMessage = message) }
+        }
+    }
 
     override val uiState: StateFlow<BluetoothTransferUiState> = mutableUiState
     private var runningJob: Job? = null
@@ -112,8 +149,10 @@ private class AndroidBluetoothTransferController(
         }
 
         override fun onScanFailed(errorCode: Int) {
-            mutableUiState.update {
-                it.copy(inProgress = false, statusMessage = "Errore scansione BLE (codice $errorCode).")
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(inProgress = false, statusMessage = transferBleScanError(errorCode))
+                }
             }
         }
     }
@@ -121,8 +160,10 @@ private class AndroidBluetoothTransferController(
     private val advertiseCallback = object : AdvertiseCallback() {
         override fun onStartFailure(errorCode: Int) {
             advertised = false
-            mutableUiState.update {
-                it.copy(inProgress = false, statusMessage = "Errore ascolto BLE (codice $errorCode).")
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(inProgress = false, statusMessage = transferBleListenError(errorCode))
+                }
             }
         }
     }
@@ -131,8 +172,13 @@ private class AndroidBluetoothTransferController(
         override fun onServiceAdded(status: Int, service: BluetoothGattService?) {
             if (service?.uuid != SERVICE_UUID) return
             if (status != BluetoothGatt.GATT_SUCCESS) {
-                mutableUiState.update {
-                    it.copy(inProgress = false, statusMessage = "Impossibile registrare servizio BLE (status $status).")
+                scope.launch {
+                    mutableUiState.update {
+                        it.copy(
+                            inProgress = false,
+                            statusMessage = transferBleServiceRegisterError(status)
+                        )
+                    }
                 }
                 return
             }
@@ -182,7 +228,7 @@ private class AndroidBluetoothTransferController(
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 val address = pendingConnectAddress
-                failSend("Connessione BLE fallita (status $status).")
+                failSend { transferBleConnectionFailed(status) }
                 runCatching { gatt.close() }
                 if (status == 22 && connectRetryCount < 1 && address != null) {
                     connectRetryCount += 1
@@ -195,7 +241,7 @@ private class AndroidBluetoothTransferController(
                 gatt.discoverServices()
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 if (mutableUiState.value.inProgress && outboundIndex < outboundChunks.size) {
-                    failSend("Dispositivo disconnesso durante l'invio.")
+                    failSend { transferBleDisconnectedDuringSend() }
                 }
                 runCatching { gatt.close() }
             }
@@ -203,12 +249,12 @@ private class AndroidBluetoothTransferController(
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
             if (status != BluetoothGatt.GATT_SUCCESS) {
-                failSend("Discovery servizi BLE fallita.")
+                failSend { transferBleServiceDiscoveryFailed() }
                 return
             }
             val characteristic = gatt.getService(SERVICE_UUID)?.getCharacteristic(CHARACTERISTIC_UUID)
             if (characteristic == null) {
-                failSend("Servizio HouseBuddy BLE non trovato.")
+                failSend { transferBleServiceNotFound() }
                 return
             }
             targetCharacteristic = characteristic
@@ -222,19 +268,21 @@ private class AndroidBluetoothTransferController(
             status: Int
         ) {
             if (status != BluetoothGatt.GATT_SUCCESS) {
-                failSend("Invio BLE fallito (status $status).")
+                failSend { transferBleSendFailed(status) }
                 runCatching { gatt.disconnect() }
                 return
             }
             outboundIndex += 1
             if (outboundIndex >= outboundChunks.size) {
-                mutableUiState.update {
-                    it.copy(
-                        inProgress = false,
-                        completed = true,
-                        statusMessage = "Settings inviati con successo.",
-                        details = buildTransferDetails(outboundKeys)
-                    )
+                scope.launch {
+                    mutableUiState.update {
+                        it.copy(
+                            inProgress = false,
+                            completed = true,
+                            statusMessage = transferSendSuccess(),
+                            details = buildTransferDetails(outboundKeys)
+                        )
+                    }
                 }
                 runCatching { gatt.disconnect() }
             } else {
@@ -245,21 +293,29 @@ private class AndroidBluetoothTransferController(
 
     override fun start() {
         if (adapter == null) {
-            mutableUiState.update { it.copy(supported = false, statusMessage = "Bluetooth non disponibile.") }
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(supported = false, statusMessage = transferBluetoothUnavailable())
+                }
+            }
             return
         }
         if (!hasConnectPermission()) {
-            mutableUiState.update {
-                it.copy(
-                    inProgress = false,
-                    statusMessage = "Permesso Bluetooth mancante. Consenti 'Dispositivi nelle vicinanze' nelle impostazioni app."
-                )
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(
+                        inProgress = false,
+                        statusMessage = transferBluetoothPermissionMissing()
+                    )
+                }
             }
             return
         }
         if (!adapter.isEnabled) {
-            mutableUiState.update {
-                it.copy(inProgress = false, statusMessage = "Bluetooth disattivato. Attivalo e riprova.")
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(inProgress = false, statusMessage = transferBluetoothDisabled())
+                }
             }
             return
         }
@@ -273,12 +329,18 @@ private class AndroidBluetoothTransferController(
     override fun selectPeer(address: String) {
         if (mode != TransferMode.Send) return
         if (!hasConnectPermission()) {
-            mutableUiState.update { it.copy(statusMessage = "Permesso Bluetooth mancante. Impossibile connettere.") }
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(statusMessage = transferBluetoothConnectPermissionMissing())
+                }
+            }
             return
         }
         val device = discoveredDevices[address]
         if (device == null) {
-            mutableUiState.update { it.copy(statusMessage = "Dispositivo non trovato. Aggiorna la lista e riprova.") }
+            scope.launch {
+                mutableUiState.update { it.copy(statusMessage = transferDeviceNotFound()) }
+            }
             return
         }
         runCatching { leScanner?.stopScan(scanCallback) }
@@ -289,13 +351,15 @@ private class AndroidBluetoothTransferController(
         pendingConnectAddress = address
         connectRetryCount = 0
 
-        mutableUiState.update {
-            it.copy(
-                inProgress = true,
-                completed = false,
-                details = emptyList(),
-                statusMessage = "Connessione al dispositivo in corso..."
-            )
+        scope.launch {
+            mutableUiState.update {
+                it.copy(
+                    inProgress = true,
+                    completed = false,
+                    details = emptyList(),
+                    statusMessage = transferConnecting()
+                )
+            }
         }
         activeGatt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             device.connectGatt(context, false, gattCallback, BluetoothDevice.TRANSPORT_LE)
@@ -336,20 +400,30 @@ private class AndroidBluetoothTransferController(
     @SuppressLint("MissingPermission")
     private fun startListening() {
         if (!hasAdvertisePermission()) {
-            mutableUiState.update { it.copy(inProgress = false, statusMessage = "Permesso advertising Bluetooth mancante.") }
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(inProgress = false, statusMessage = transferAdvertisePermissionMissing())
+                }
+            }
             return
         }
-        mutableUiState.update {
-            it.copy(
-                peers = emptyList(),
-                inProgress = true,
-                completed = false,
-                details = emptyList(),
-                statusMessage = "In ascolto di un dispositivo in invio..."
-            )
+        scope.launch {
+            mutableUiState.update {
+                it.copy(
+                    peers = emptyList(),
+                    inProgress = true,
+                    completed = false,
+                    details = emptyList(),
+                    statusMessage = transferListeningForSender()
+                )
+            }
         }
         val manager = bluetoothManager ?: run {
-            mutableUiState.update { it.copy(inProgress = false, statusMessage = "Bluetooth manager non disponibile.") }
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(inProgress = false, statusMessage = transferBluetoothManagerUnavailable())
+                }
+            }
             return
         }
         activeGattServer = manager.openGattServer(context, gattServerCallback)
@@ -362,7 +436,11 @@ private class AndroidBluetoothTransferController(
         service.addCharacteristic(characteristic)
         val serviceAdded = activeGattServer?.addService(service) == true
         if (!serviceAdded) {
-            mutableUiState.update { it.copy(inProgress = false, statusMessage = "Impossibile creare servizio BLE.") }
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(inProgress = false, statusMessage = transferBleServiceCreateFailed())
+                }
+            }
             return
         }
         val settings = AdvertiseSettings.Builder()
@@ -381,39 +459,52 @@ private class AndroidBluetoothTransferController(
     @SuppressLint("MissingPermission")
     private fun startScanning() {
         if (!hasScanPermission()) {
-            mutableUiState.update { it.copy(inProgress = false, statusMessage = "Permesso scansione Bluetooth mancante.") }
+            scope.launch {
+                mutableUiState.update {
+                    it.copy(inProgress = false, statusMessage = transferScanPermissionMissing())
+                }
+            }
             return
         }
         discoveredDevices.clear()
-        mutableUiState.update {
-            it.copy(
-                peers = emptyList(),
-                inProgress = true,
-                completed = false,
-                details = emptyList(),
-                statusMessage = "Ricerca dispositivi BLE in corso..."
-            )
+        scope.launch {
+            mutableUiState.update {
+                it.copy(
+                    peers = emptyList(),
+                    inProgress = true,
+                    completed = false,
+                    details = emptyList(),
+                    statusMessage = transferScanningDevices()
+                )
+            }
         }
         val settings = ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
             .build()
         runCatching { leScanner?.startScan(null, settings, scanCallback) }
             .onFailure { error ->
-                mutableUiState.update { it.copy(inProgress = false, statusMessage = "Errore scansione BLE: ${error.message}") }
+                scope.launch {
+                    mutableUiState.update {
+                        it.copy(
+                            inProgress = false,
+                            statusMessage = transferBleScanFailed(error.message.orEmpty())
+                        )
+                    }
+                }
             }
     }
 
     @SuppressLint("MissingPermission")
     private fun writeNextChunk(gatt: BluetoothGatt) {
         val characteristic = targetCharacteristic ?: run {
-            failSend("Caratteristica BLE non disponibile.")
+            failSend { transferBleCharacteristicUnavailable() }
             return
         }
         if (outboundIndex >= outboundChunks.size) return
         characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
         characteristic.value = outboundChunks[outboundIndex]
         if (!gatt.writeCharacteristic(characteristic)) {
-            failSend("Impossibile inviare chunk BLE.")
+            failSend { transferBleChunkSendFailed() }
         }
     }
 
@@ -429,7 +520,7 @@ private class AndroidBluetoothTransferController(
                             it.copy(
                                 inProgress = false,
                                 completed = true,
-                                statusMessage = "Settings ricevuti e salvati con successo.",
+                                statusMessage = transferReceiveSuccess(),
                                 details = buildTransferDetails(keys)
                             )
                         }
@@ -439,7 +530,9 @@ private class AndroidBluetoothTransferController(
                             it.copy(
                                 inProgress = false,
                                 completed = false,
-                                statusMessage = "Ricezione fallita: ${error.message ?: "errore sconosciuto"}",
+                                statusMessage = transferReceiveFailed(
+                                    error.message ?: transferUnknownError()
+                                ),
                                 details = emptyList()
                             )
                         }
@@ -475,24 +568,31 @@ private class AndroidBluetoothTransferController(
     }
 
     private fun publishPeers() {
-        val peers = discoveredDevices.values
-            .map { BluetoothPeer(name = it.name ?: "Dispositivo senza nome", address = it.address) }
-            .sortedBy { it.name.lowercase() }
-        mutableUiState.update {
-            it.copy(
-                peers = peers,
-                inProgress = false,
-                statusMessage = if (peers.isEmpty()) {
-                    "Nessun dispositivo trovato. Verifica Bluetooth e riprova."
-                } else {
-                    "Seleziona il telefono in modalità ricezione."
-                }
-            )
+        scope.launch {
+            val unnamedDevice = transferDeviceUnnamed()
+            val peers = discoveredDevices.values
+                .map { BluetoothPeer(name = it.name ?: unnamedDevice, address = it.address) }
+                .sortedBy { it.name.lowercase() }
+            val statusMessage = if (peers.isEmpty()) {
+                transferNoDevicesFound()
+            } else {
+                transferSelectReceivingPhone()
+            }
+            mutableUiState.update {
+                it.copy(
+                    peers = peers,
+                    inProgress = false,
+                    statusMessage = statusMessage
+                )
+            }
         }
     }
 
-    private fun failSend(message: String) {
-        mutableUiState.update { it.copy(inProgress = false, completed = false, statusMessage = message) }
+    private fun failSend(messageProvider: suspend () -> String) {
+        scope.launch {
+            val message = messageProvider()
+            mutableUiState.update { it.copy(inProgress = false, completed = false, statusMessage = message) }
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -590,14 +690,4 @@ private fun importSettingsPayload(payload: String): List<String> {
         }
     editor.commit()
     return importedKeys.sorted()
-}
-
-private fun buildTransferDetails(keys: List<String>): List<String> {
-    if (keys.isEmpty()) return listOf("Nessun setting trasferito.")
-    val preview = keys.take(5).joinToString(", ")
-    val extra = if (keys.size > 5) " (+${keys.size - 5} altri)" else ""
-    return listOf(
-        "Settings trasferiti: ${keys.size}",
-        "Chiavi: $preview$extra"
-    )
 }

@@ -23,6 +23,20 @@ import com.example.housebuddy.presentation.mvi.HousePriceEvent
 import com.example.housebuddy.presentation.mvi.HousePriceViewState
 import com.example.housebuddy.ui.components.MyDropdown
 import com.example.housebuddy.ui.components.StepperInputField
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.agency_commission_fixed
+import housebuddy.shared.generated.resources.agency_commission_label
+import housebuddy.shared.generated.resources.agency_commission_percentage
+import housebuddy.shared.generated.resources.cadastral_income_label
+import housebuddy.shared.generated.resources.deposit_label
+import housebuddy.shared.generated.resources.green_mortgage_label
+import housebuddy.shared.generated.resources.mortgage_rate_label
+import housebuddy.shared.generated.resources.mortgage_years_label
+import housebuddy.shared.generated.resources.number_of_buyers_label
+import housebuddy.shared.generated.resources.suffix_eur
+import housebuddy.shared.generated.resources.suffix_percent
+import housebuddy.shared.generated.resources.suffix_years
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SettingsScreen(
@@ -30,6 +44,9 @@ fun SettingsScreen(
     onIntent: (HousePriceEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val percentageLabel = stringResource(Res.string.agency_commission_percentage)
+    val fixedLabel = stringResource(Res.string.agency_commission_fixed)
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -42,17 +59,17 @@ fun SettingsScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Mutuo Green (classe A o B)")
+            Text(text = stringResource(Res.string.green_mortgage_label))
             Switch(
                 checked = state.greenMortgage,
                 onCheckedChange = { onIntent(HousePriceEvent.GreenMortgageChanged(it)) }
             )
         }
         MyDropdown(
-            label = "Provvigione Agenzia",
-            options = agencyCommissionOptions,
-            selectedOption = if (state.isAgencyCommissionPercentage) "Percentuale" else "Importo Fisso",
-            onOptionSelected = { onIntent(HousePriceEvent.AgencyCommissionTypeChanged(it == "Percentuale")) },
+            label = stringResource(Res.string.agency_commission_label),
+            options = listOf(percentageLabel, fixedLabel),
+            selectedOption = if (state.isAgencyCommissionPercentage) percentageLabel else fixedLabel,
+            onOptionSelected = { onIntent(HousePriceEvent.AgencyCommissionTypeChanged(it == percentageLabel)) },
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         )
         Row(
@@ -63,7 +80,7 @@ fun SettingsScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "N. Acquirenti",
+                text = stringResource(Res.string.number_of_buyers_label),
                 modifier = Modifier.weight(1f)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -83,34 +100,32 @@ fun SettingsScreen(
             }
         }
         StepperInputField(
-            label = "Tasso mutuo",
+            label = stringResource(Res.string.mortgage_rate_label),
             value = state.mortgageRateInput,
             onValueChange = { onIntent(HousePriceEvent.MortgageRateChanged(it)) },
             onStep = { onIntent(HousePriceEvent.MortgageRateStepped(it)) },
-            suffix = "%"
+            suffix = stringResource(Res.string.suffix_percent)
         )
         StepperInputField(
-            label = "Anni mutuo",
+            label = stringResource(Res.string.mortgage_years_label),
             value = state.mortgageYearsInput,
             onValueChange = { onIntent(HousePriceEvent.MortgageYearsChanged(it)) },
             onStep = { onIntent(HousePriceEvent.MortgageYearsStepped(it)) },
-            suffix = "anni"
+            suffix = stringResource(Res.string.suffix_years)
         )
         StepperInputField(
-            label = "Rendita catastale",
+            label = stringResource(Res.string.cadastral_income_label),
             value = state.cadastralIncomeInput,
             onValueChange = { onIntent(HousePriceEvent.CadastralIncomeChanged(it)) },
             onStep = { onIntent(HousePriceEvent.CadastralIncomeStepped(it)) },
-            suffix = "EUR"
+            suffix = stringResource(Res.string.suffix_eur)
         )
         StepperInputField(
-            label = "Caparra",
+            label = stringResource(Res.string.deposit_label),
             value = state.depositInput,
             onValueChange = { onIntent(HousePriceEvent.DepositChanged(it)) },
             onStep = { onIntent(HousePriceEvent.DepositStepped(it)) },
-            suffix = "EUR"
+            suffix = stringResource(Res.string.suffix_eur)
         )
     }
 }
-
-private val agencyCommissionOptions = listOf("Percentuale", "Importo Fisso")

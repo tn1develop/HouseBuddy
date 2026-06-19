@@ -13,6 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.carpe_diem
+import housebuddy.shared.generated.resources.menu_select_option
+import housebuddy.shared.generated.resources.nav_menu
+import housebuddy.shared.generated.resources.transfer
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MenuScreen(
@@ -26,14 +32,14 @@ fun MenuScreen(
             .padding(16.dp)
     ) {
         Text(
-            text = "Menu",
+            text = stringResource(Res.string.nav_menu),
             style = MaterialTheme.typography.titleMedium
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Seleziona un'opzione.",
+            text = stringResource(Res.string.menu_select_option),
             style = MaterialTheme.typography.bodyMedium,
         )
 
@@ -47,14 +53,14 @@ fun MenuScreen(
                 onClick = onTransferClick,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Trasferimento")
+                Text(stringResource(Res.string.transfer))
             }
 
             Button(
                 onClick = onCarpeDiemClick,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Carpe diem")
+                Text(stringResource(Res.string.carpe_diem))
             }
         }
     }

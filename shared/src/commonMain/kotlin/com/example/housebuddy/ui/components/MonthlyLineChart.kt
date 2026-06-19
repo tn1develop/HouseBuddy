@@ -38,6 +38,10 @@ import androidx.compose.ui.unit.sp
 import com.example.housebuddy.domain.model.MonthlyExchangeRate
 import com.example.housebuddy.domain.util.formatNumber
 import com.example.housebuddy.ui.theme.Purple40
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.euribor_chart_x_axis
+import housebuddy.shared.generated.resources.euribor_chart_y_axis
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.round
@@ -109,7 +113,7 @@ fun MonthlyLineChart(
 
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = "Euribor 3M (%)",
+            text = stringResource(Res.string.euribor_chart_y_axis),
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.padding(start = yAxisWidth, bottom = 4.dp)
         )
@@ -278,7 +282,7 @@ fun MonthlyLineChart(
             }
         }
         Text(
-            text = "Mese / Anno",
+            text = stringResource(Res.string.euribor_chart_x_axis),
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)

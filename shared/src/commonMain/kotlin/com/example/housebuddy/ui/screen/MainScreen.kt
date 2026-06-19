@@ -26,6 +26,14 @@ import com.example.housebuddy.presentation.mvi.ExchangeRateViewModel
 import com.example.housebuddy.presentation.mvi.HousePriceViewModel
 import com.example.housebuddy.ui.navigation.AppDestination
 import com.example.housebuddy.ui.navigation.BottomNavDestination
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.back
+import housebuddy.shared.generated.resources.carpe_diem
+import housebuddy.shared.generated.resources.settings
+import housebuddy.shared.generated.resources.transfer
+import housebuddy.shared.generated.resources.transfer_receive_title
+import housebuddy.shared.generated.resources.transfer_send_title
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +56,7 @@ fun MainScreen(
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Indietro"
+                                contentDescription = stringResource(Res.string.back)
                             )
                         }
                     }
@@ -58,7 +66,7 @@ fun MainScreen(
                         IconButton(onClick = { navController.navigate(AppDestination.Settings) }) {
                             Icon(
                                 imageVector = Icons.Default.Settings,
-                                contentDescription = "Impostazioni"
+                                contentDescription = stringResource(Res.string.settings)
                             )
                         }
                     }
@@ -83,10 +91,10 @@ fun MainScreen(
                             icon = {
                                 Icon(
                                     imageVector = item.icon,
-                                    contentDescription = item.label
+                                    contentDescription = stringResource(item.labelRes)
                                 )
                             },
-                            label = { Text(text = item.label) }
+                            label = { Text(text = stringResource(item.labelRes)) }
                         )
                     }
                 }
@@ -177,15 +185,16 @@ private fun NavDestination?.isTopLevelDestination(): Boolean {
     return BottomNavDestination.entries.any { item -> route == item.route }
 }
 
+@Composable
 private fun NavDestination?.resolveTopBarTitle(): String {
     return when (this?.route) {
-        AppDestination.Settings -> "Impostazioni"
-        AppDestination.Transfer -> "Trasferimento"
-        AppDestination.CarpeDiem -> "Carpe diem"
-        AppDestination.TransferReceive -> "Ricevi trasferimento"
-        AppDestination.TransferSend -> "Invia trasferimento"
-        BottomNavDestination.AndamentoStorico.route -> BottomNavDestination.AndamentoStorico.label
-        BottomNavDestination.Menu.route -> BottomNavDestination.Menu.label
-        else -> BottomNavDestination.Calcolo.label
+        AppDestination.Settings -> stringResource(Res.string.settings)
+        AppDestination.Transfer -> stringResource(Res.string.transfer)
+        AppDestination.CarpeDiem -> stringResource(Res.string.carpe_diem)
+        AppDestination.TransferReceive -> stringResource(Res.string.transfer_receive_title)
+        AppDestination.TransferSend -> stringResource(Res.string.transfer_send_title)
+        BottomNavDestination.AndamentoStorico.route -> stringResource(BottomNavDestination.AndamentoStorico.labelRes)
+        BottomNavDestination.Menu.route -> stringResource(BottomNavDestination.Menu.labelRes)
+        else -> stringResource(BottomNavDestination.Calcolo.labelRes)
     }
 }

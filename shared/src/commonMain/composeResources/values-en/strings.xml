@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HouseBuddy</string>
+
+    <!-- Navigation -->
+    <string name="nav_calcolo">Calculator</string>
+    <string name="nav_storico">History</string>
+    <string name="nav_menu">Menu</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+    <string name="settings">Settings</string>
+    <string name="info">Info</string>
+    <string name="retry">Retry</string>
+    <string name="suffix_eur">EUR</string>
+    <string name="suffix_percent">%</string>
+    <string name="suffix_years">years</string>
+
+    <!-- House price calculator -->
+    <string name="house_price_label">House price</string>
+    <string name="mortgage_request_label">Mortgage request</string>
+    <string name="agency_percentage_label">Agency percentage</string>
+    <string name="agency_fixed_label">Agency fixed fee</string>
+    <string name="upfront_liquidity_label">Upfront cash needed at or before closing</string>
+    <string name="mortgage_payment_estimate_label">Estimated mortgage payment</string>
+    <string name="expense_label_total">Total</string>
+    <string name="expense_label_per_capita">Per person (%1$d buyers)</string>
+    <string name="mortgage_request_supporting">%1$s · %2$s%% of house price</string>
+
+    <!-- Liquidity info dialog -->
+    <string name="liquidity_info_main_header">main expenses:</string>
+    <string name="liquidity_info_main_deposit">- Deposit %1$s</string>
+    <string name="liquidity_info_main_down_payment">- Down payment minus deposit %1$s</string>
+    <string name="liquidity_info_main_agency">- Agency with VAT %1$s</string>
+    <string name="liquidity_info_section_total">TOTAL: %1$s</string>
+    <string name="liquidity_info_mortgage_header">mortgage:</string>
+    <string name="liquidity_info_mortgage_application">- application fee %1$s</string>
+    <string name="liquidity_info_mortgage_substitute_tax">- substitute tax %1$s</string>
+    <string name="liquidity_info_mortgage_appraisal">- appraisal %1$s</string>
+    <string name="liquidity_info_mortgage_fire_insurance">- fire insurance %1$s</string>
+    <string name="liquidity_info_mortgage_life_insurance">- life insurance %1$s</string>
+    <string name="liquidity_info_mortgage_notary">- mortgage notary %1$s</string>
+    <string name="liquidity_info_notary_header">purchase notary:</string>
+    <string name="liquidity_info_notary_registration">- Registration tax %1$s</string>
+    <string name="liquidity_info_notary_mortgage_registry">- Mortgage registry tax %1$s</string>
+    <string name="liquidity_info_notary_cadastral">- Cadastral tax %1$s</string>
+    <string name="liquidity_info_notary_archive">- Archive fee %1$s</string>
+    <string name="liquidity_info_notary_drafting">- Fees, drafting, copy rights %1$s</string>
+    <string name="liquidity_info_notary_regulatory">- CNN, Council, Fund, registry contributions %1$s</string>
+    <string name="liquidity_info_notary_searches">- Mortgage registry searches %1$s</string>
+
+    <!-- Settings -->
+    <string name="green_mortgage_label">Green mortgage (class A or B)</string>
+    <string name="agency_commission_label">Agency commission</string>
+    <string name="agency_commission_percentage">Percentage</string>
+    <string name="agency_commission_fixed">Fixed amount</string>
+    <string name="number_of_buyers_label">No. of buyers</string>
+    <string name="mortgage_rate_label">Mortgage rate</string>
+    <string name="mortgage_years_label">Mortgage term</string>
+    <string name="cadastral_income_label">Cadastral income</string>
+    <string name="deposit_label">Deposit</string>
+
+    <!-- Carpe diem -->
+    <string name="rent_payment_label">Rent (utilities excluded)</string>
+    <string name="current_liquidity_label">Current liquidity</string>
+    <string name="annual_savings_label">Annual savings</string>
+    <string name="yearly_total_cost_label">Total cost per year</string>
+    <string name="chart_legend">Bar height = total house cost + rent.</string>
+
+    <!-- Exchange rate -->
+    <string name="euribor_history_title">Historical Euribor 3-month trend</string>
+    <string name="euribor_chart_description">3-month Euribor (euro area), ECB source. Scroll the chart for the full history.</string>
+    <string name="euribor_mortgage_explanation">The Euribor rate is the benchmark for mortgage rates in Europe. When it changes, mortgage payments change too.</string>
+    <string name="euribor_disclaimer">Note: Euribor is not the mortgage rate your bank will offer — it is the reference rate mortgages are based on. The final rate depends on many factors, including your financial situation and the bank's policies.</string>
+    <string name="ecb_loading">Loading ECB data…</string>
+    <string name="no_data_available">No data available.</string>
+    <string name="latest_month">Latest month (%1$s): %2$s%%</string>
+    <string name="period_range">Period: %1$s → %2$s (%3$d months)</string>
+    <string name="euribor_chart_y_axis">Euribor 3M (%)</string>
+    <string name="euribor_chart_x_axis">Month / Year</string>
+    <string name="exchange_rate_load_error">Error loading data</string>
+
+    <!-- Menu & transfer navigation -->
+    <string name="menu_select_option">Select an option.</string>
+    <string name="transfer">Transfer</string>
+    <string name="carpe_diem">Carpe diem</string>
+    <string name="transfer_select_direction">Select transfer direction.</string>
+    <string name="transfer_receive_on_phone">Receive on this phone</string>
+    <string name="transfer_send_from_phone">Send from this phone</string>
+    <string name="transfer_send_title">Send transfer</string>
+    <string name="transfer_receive_title">Receive transfer</string>
+    <string name="transfer_send_subtitle">This phone searches via Bluetooth for a device in receive mode.</string>
+    <string name="transfer_receive_subtitle">This phone searches via Bluetooth for a device in send mode.</string>
+    <string name="transfer_waiting_screen_send">Send Transfer</string>
+    <string name="transfer_waiting_screen_receive">Receive Transfer</string>
+    <string name="transfer_waiting_instruction">Keep the "%1$s" screen open on the other phone too.</string>
+    <string name="transfer_receive_in_progress">Listening to receive settings via Bluetooth.</string>
+    <string name="transfer_send_in_progress">Select a device and start sending settings.</string>
+    <string name="transfer_paired_devices">Paired devices</string>
+    <string name="transfer_operation_in_progress">Operation in progress...</string>
+    <string name="transfer_retry_connection">Retry connection</string>
+    <string name="transfer_restart_bluetooth_listen">Restart Bluetooth listening</string>
+    <string name="transfer_refresh_bluetooth_devices">Refresh Bluetooth devices</string>
+    <string name="transfer_change_direction">Change direction</string>
+
+    <!-- Bluetooth transfer status -->
+    <string name="transfer_ready">Ready</string>
+    <string name="transfer_bluetooth_not_supported">Bluetooth is not supported on this device.</string>
+    <string name="transfer_bluetooth_unavailable">Bluetooth is not available.</string>
+    <string name="transfer_bluetooth_permission_missing">Bluetooth permission missing. Allow 'Nearby devices' in app settings.</string>
+    <string name="transfer_bluetooth_disabled">Bluetooth is off. Turn it on and try again.</string>
+    <string name="transfer_bluetooth_connect_permission_missing">Bluetooth permission missing. Cannot connect.</string>
+    <string name="transfer_device_not_found">Device not found. Refresh the list and try again.</string>
+    <string name="transfer_connecting">Connecting to device...</string>
+    <string name="transfer_ble_scan_error">BLE scan error (code %1$d).</string>
+    <string name="transfer_ble_listen_error">BLE listen error (code %1$d).</string>
+    <string name="transfer_ble_service_register_error">Could not register BLE service (status %1$d).</string>
+    <string name="transfer_ble_connection_failed">BLE connection failed (status %1$d).</string>
+    <string name="transfer_ble_disconnected_during_send">Device disconnected during send.</string>
+    <string name="transfer_ble_service_discovery_failed">BLE service discovery failed.</string>
+    <string name="transfer_ble_service_not_found">HouseBuddy BLE service not found.</string>
+    <string name="transfer_ble_send_failed">BLE send failed (status %1$d).</string>
+    <string name="transfer_send_success">Settings sent successfully.</string>
+    <string name="transfer_advertise_permission_missing">Bluetooth advertising permission missing.</string>
+    <string name="transfer_listening_for_sender">Listening for a device in send mode...</string>
+    <string name="transfer_bluetooth_manager_unavailable">Bluetooth manager not available.</string>
+    <string name="transfer_ble_service_create_failed">Could not create BLE service.</string>
+    <string name="transfer_scan_permission_missing">Bluetooth scan permission missing.</string>
+    <string name="transfer_scanning_devices">Searching for BLE devices...</string>
+    <string name="transfer_ble_scan_failed">BLE scan error: %1$s</string>
+    <string name="transfer_ble_characteristic_unavailable">BLE characteristic not available.</string>
+    <string name="transfer_ble_chunk_send_failed">Could not send BLE chunk.</string>
+    <string name="transfer_receive_success">Settings received and saved successfully.</string>
+    <string name="transfer_receive_failed">Receive failed: %1$s</string>
+    <string name="transfer_unknown_error">unknown error</string>
+    <string name="transfer_device_unnamed">Unnamed device</string>
+    <string name="transfer_no_devices_found">No devices found. Check Bluetooth and try again.</string>
+    <string name="transfer_select_receiving_phone">Select the phone in receive mode.</string>
+    <string name="transfer_ble_service_error">BLE service error: %1$s</string>
+    <string name="transfer_send_failed">Send failed: %1$s</string>
+    <string name="transfer_no_settings">No settings transferred.</string>
+    <string name="transfer_settings_count">Settings transferred: %1$d</string>
+    <string name="transfer_keys_preview">Keys: %1$s%2$s</string>
+    <string name="transfer_extra_others"> (+%1$d more)</string>
+</resources>
