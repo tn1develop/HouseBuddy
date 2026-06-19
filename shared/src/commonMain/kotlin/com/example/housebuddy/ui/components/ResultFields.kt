@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.housebuddy.domain.util.formatEuroAmount
+import housebuddy.shared.generated.resources.Res
+import housebuddy.shared.generated.resources.ic_info
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ResultField(label: String, value: Double, modifier: Modifier = Modifier) {
@@ -71,7 +72,7 @@ fun InfoIcon(
     }
 
     Icon(
-        imageVector = Icons.Outlined.Info,
+        painter = painterResource(Res.drawable.ic_info),
         contentDescription = "Info",
         tint = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
